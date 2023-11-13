@@ -63,8 +63,8 @@ bool Game::loadMedia()
 	//Loading success flag
 	bool success = true;
 	
-	assets = loadTexture("Idle.png");
-    gTexture = loadTexture("Lvl1.png");
+	assets = loadTexture("Assets/Attack_3.png");
+    gTexture = loadTexture("Assets/Waterfall1.png");
 	if(assets==NULL || gTexture==NULL)
     {
         printf("Unable to run due to error: %s\n",SDL_GetError());
@@ -139,6 +139,35 @@ void Game::run( )
 				SDL_GetMouseState(&xMouse,&yMouse);
 				createObject(xMouse, yMouse);
 			}
+			else if (e.type == SDL_KEYDOWN){
+				switch(e.key.keysym.sym){
+				case (SDLK_UP):
+				std::cout << "UP pressed" << std::endl;
+				Jump(gRenderer, assets);
+				break;
+
+				case (SDLK_DOWN):
+				dropDown(gRenderer, assets);
+				std::cout << "Down pressed" << std::endl;
+				break;
+
+				case (SDLK_RIGHT):
+				moveRight(gRenderer, assets);
+				std::cout << "Right pressed" << std::endl;
+				break;
+
+				case (SDLK_LEFT):
+				moveLeft(gRenderer, assets);
+				std::cout << "Left pressed" << std::endl;
+				break;
+
+				case (SDLK_SPACE):
+				Jump(gRenderer, assets);
+				std::cout << "Space pressed" << std::endl;
+				break;
+				}
+			}
+			
 		}
 
 		SDL_RenderClear(gRenderer); //removes everything from renderer

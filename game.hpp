@@ -10,8 +10,8 @@
 
 class Game{
     //Screen dimension constants
-    const int SCREEN_WIDTH = (826); //1000    826     414
-    const int SCREEN_HEIGHT = (734); //600;   734     670
+    const int SCREEN_WIDTH = (896); //1000    826     414
+    const int SCREEN_HEIGHT = (640); //600;   734     670
 
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;

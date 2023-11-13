@@ -5,35 +5,98 @@
 // # include <gif-lib.h>
 using namespace std;
 
-// Define the units for pigeons, butterflies, and bees {{srcRect}, {moverRect}}
 
-Unit pigeon = {{7,88,155,103}, {30, 40, 50, 50}};
-Unit butterfly_straight = {{257,24,173,134},{30,40,60,60}};
-Unit bee_straight = {{41,47,100,81},{30,40,46,81}};
+Unit Walk = {{22,53,79,75},{30,40,202,150}, 0, 0};
 
-// Create vectors for pigeons, bees, and butterflies
-vector<Unit> pigeons;
-vector<Unit> bees;
-vector<Unit> butterflies;
+vector<Unit> Ninjas;
 
 // Initialize counters for animation frames (Used to control the animation status automatically for each object)
-int pigeon_num = 0; 
-int butterfly_num = 0;  
-int bee_num = 0;
+
+int num = 0;
 
 void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets){
-    for (Unit& bee : bees) {
+    for (Unit& Ninja : Ninjas) {
         // Update the x-coordinate of the moverRect
-        if (bee.moverRect.x > 1000) {
-            bee.moverRect.x = 0;
-        } else {
-            bee.moverRect.x += 1;
-            SDL_Delay(1000);
+        // if (Ninja.moverRect.x > 1000) {
+        //     Ninja.moverRect.x = 0;
+        // } else {
+        //     Ninja.moverRect.x += 1;
+        //     SDL_Delay(1000);
+        // }
+        if (num == 0){
+            Ninja.srcRect = {22,53,79,75};
+            num += 1;
         }
-        
-        if (bee_num == 0) {
-            bee.srcRect = {340,160,296,288};
+        else if (num == 1){
+            Ninja.srcRect = {151, 53, 100, 75};
+            num += 1;
         }
+        else if (num == 2){
+        Ninja.srcRect = {280, 53, 101, 75};
+        num = 0;
+        }
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+    }
+}
+
+void createObject(int x, int y){
+        if (Ninjas.size() == 1){
+            return;
+        }
+        Unit Shinobi = Walk;
+        Shinobi.moverRect.x = x;
+        Shinobi.moverRect.y = 566-150;
+        Ninjas.push_back(Shinobi);
+}
+
+void Attack(SDL_Renderer* gRenderer, SDL_Texture* assets){
+    for (Unit& Ninja : Ninjas){
+        Ninja.srcRect = {151, 53, 100, 75};
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+        SDL_Delay(500);
+        Ninja.srcRect = {280, 53, 101, 75};
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+        // SDL_Delay(500);
+        Ninja.srcRect = {22,53,79,75};
+    }
+}
+
+void Jump(SDL_Renderer* gRenderer, SDL_Texture* assets){
+        Ninjas[0].yVelocity = 10;
+        Ninjas[0].moverRect.y -= Ninjas[0].yVelocity;
+    // if (Ninjas[0].moverRect.y = (566-150)){
+    //     while(Ninjas[0].moverRect.y <= (566-150)){
+    //         Ninjas[0].moverRect.y -= Ninjas[0].yVelocity;
+    //         Ninjas[0].yVelocity += 3;
+    //     }
+    //     Ninjas[0].yVelocity = 0;
+
+    // }
+    return;
+}
+
+void moveRight(SDL_Renderer* gRenderer, SDL_Texture* assets){
+        Ninjas[0].xVelocity = 10;
+        Ninjas[0].moverRect.x += Ninjas[0].yVelocity;
+    return;
+}
+
+void moveLeft(SDL_Renderer* gRenderer, SDL_Texture* assets){
+        Ninjas[0].xVelocity = 10;
+        Ninjas[0].moverRect.x -= Ninjas[0].yVelocity;
+    return;
+}
+
+void dropDown(SDL_Renderer* gRenderer, SDL_Texture* assets){
+        Ninjas[0].yVelocity = 10;
+        Ninjas[0].moverRect.y += Ninjas[0].yVelocity;
+    return;
+}
+        // if (bee_num == 0) {
+        //     bee.srcRect = {340,160,296,288};
+        // }
+
+
         // Update the srcRect based on the bee_num
         // if (bee_num == 0) {
         //     bee.srcRect = {540, 370, 193, 115};
@@ -47,18 +110,7 @@ void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets){
         // }
         
         // Render the bee on the screen
-        SDL_RenderCopy(gRenderer, assets, &bee.srcRect, &bee.moverRect);
-    }
-}
-void createObject(int x, int y){
-        if (bees.size() == 1){
-            return;
-        }
-        Unit bee = bee_straight;
-        bee.moverRect.x = x;
-        bee.moverRect.y = y;
-        bees.push_back(bee);
-}
+
 /*
 // Function to draw objects on the screen
 void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets) {
