@@ -6,15 +6,17 @@
 using namespace std;
 
 
-Unit Walk = {{22,53,79,75},{30,40,202,150}, 0, 0};
+Unit Walk = {{22,53,79,75},{0,734,99,94}, 0, 0};
+//1.25 multiplication of the width and height from the srcRect to make the characters look more appealing.
 
 vector<Unit> Ninjas;
 
 // Initialize counters for animation frames (Used to control the animation status automatically for each object)
 
-int num = 0;
+int aNum = 0;
+int walkNum = 0;
 
-void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets){
+void Attacking3(SDL_Renderer* gRenderer, SDL_Texture* assets){
     for (Unit& Ninja : Ninjas) {
         // Update the x-coordinate of the moverRect
         // if (Ninja.moverRect.x > 1000) {
@@ -23,18 +25,94 @@ void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets){
         //     Ninja.moverRect.x += 1;
         //     SDL_Delay(1000);
         // }
-        if (num == 0){
+        if (aNum == 0){
             Ninja.srcRect = {22,53,79,75};
-            num += 1;
+            Ninja.moverRect.w = 99;
+            aNum += 1;
         }
-        else if (num == 1){
+        else if (aNum == 1){
             Ninja.srcRect = {151, 53, 100, 75};
-            num += 1;
+            Ninja.moverRect.w = 125;
+            Ninja.moverRect.h = 94;
+            aNum += 1;
         }
-        else if (num == 2){
+        else if (aNum == 2){
         Ninja.srcRect = {280, 53, 101, 75};
-        num = 0;
+            Ninja.moverRect.w = 125;
+            Ninja.moverRect.h = 94;
+        aNum = 0;
         }
+
+        // assets = game.loadTexture("Assets/Walk.png");
+
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+    }
+}
+
+void Walking(SDL_Renderer* gRenderer, SDL_Texture* assets){
+    for (Unit& Ninja : Ninjas) {
+        // Update the x-coordinate of the moverRect
+        // if (Ninja.moverRect.x > 1000) {
+        //     Ninja.moverRect.x = 0;
+        // } else {
+        //     Ninja.moverRect.x += 1;
+        //     SDL_Delay(1000);
+        // }
+        if (walkNum == 0){
+            Ninja.srcRect = {26, 45, 48, 83};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 1){
+            Ninja.srcRect = {154, 44, 48, 84};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 2){
+            Ninja.srcRect = {282, 45, 51, 83};
+            Ninja.moverRect.w = 64;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 3){
+            Ninja.srcRect = {410, 46, 48, 82};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 4){
+            Ninja.srcRect = {538, 45, 48, 83};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 5){
+            Ninja.srcRect = {666, 44, 48, 84};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 6){
+            Ninja.srcRect = {794, 45, 52, 83};
+            Ninja.moverRect.w = 64;
+            Ninja.moverRect.h = 104;
+            walkNum += 1;
+        }
+        else if (walkNum == 7){
+            Ninja.srcRect = {922, 46, 48, 82};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            walkNum = 0;
+        }
+
+        if (Ninja.moverRect.x < (800)){
+        Ninja.moverRect.x += 7;
+        }
+
+        // assets = game.loadTexture("Assets/Walk.png");
+
         SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
     }
 }
@@ -44,8 +122,8 @@ void createObject(int x, int y){
             return;
         }
         Unit Shinobi = Walk;
-        Shinobi.moverRect.x = x;
-        Shinobi.moverRect.y = 566-150;
+        Shinobi.moverRect.x = 0;
+        Shinobi.moverRect.y = 734-94;
         Ninjas.push_back(Shinobi);
 }
 
@@ -77,13 +155,13 @@ void Jump(SDL_Renderer* gRenderer, SDL_Texture* assets){
 
 void moveRight(SDL_Renderer* gRenderer, SDL_Texture* assets){
         Ninjas[0].xVelocity = 10;
-        Ninjas[0].moverRect.x += Ninjas[0].yVelocity;
+        Ninjas[0].moverRect.x += Ninjas[0].xVelocity;
     return;
 }
 
 void moveLeft(SDL_Renderer* gRenderer, SDL_Texture* assets){
         Ninjas[0].xVelocity = 10;
-        Ninjas[0].moverRect.x -= Ninjas[0].yVelocity;
+        Ninjas[0].moverRect.x -= Ninjas[0].xVelocity;
     return;
 }
 
