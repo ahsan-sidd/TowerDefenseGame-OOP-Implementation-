@@ -8,6 +8,33 @@
 #include <stdlib.h>
 #include <time.h>
 
+enum GameState {
+    MENU,
+    PLAYING,
+    GAME_OVER
+};
+
+class Menu {
+public:
+    Menu(SDL_Renderer* renderer, int screenWidth, int screenHeight);
+    ~Menu();
+
+    void handleEvents(SDL_Event& e);
+    void render();
+
+    GameState getCurrentState() const { return currentState; }
+    SDL_Texture* loadTexture( std::string path );
+
+private:
+    SDL_Renderer* gRenderer;
+    SDL_Texture* menuBackgroundTexture;
+    SDL_Texture* startGameButtonTexture;
+    SDL_Rect startGameButtonRect;
+    GameState currentState;
+};
+
+
+
 class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = (1244); //1000    826     414    896
@@ -25,7 +52,12 @@ class Game{
     //global reference to png image sheets
     SDL_Texture* assets=NULL;
     
+    Menu* menu = NULL;
 
+    // Add additional member variables for the start menu
+    SDL_Texture* startMenuBackgroundTexture;
+    SDL_Texture* startMenuButtonTexture;
+    SDL_Rect startMenuButtonRect;
 public:
     Game();
     ~Game();
