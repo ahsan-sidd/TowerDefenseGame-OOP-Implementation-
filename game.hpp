@@ -30,6 +30,8 @@ private:
     SDL_Texture* menuBackgroundTexture;
     SDL_Texture* startGameButtonTexture;
     SDL_Rect startGameButtonRect;
+    SDL_Texture* exitButtonTexture;
+    SDL_Rect exitButtonRect;
     GameState currentState;
 };
 
@@ -58,6 +60,8 @@ class Game{
     SDL_Texture* startMenuBackgroundTexture;
     SDL_Texture* startMenuButtonTexture;
     SDL_Rect startMenuButtonRect;
+    SDL_Texture* exitButtonTexture;
+    SDL_Rect exitButtonRect;
 public:
     Game();
     ~Game();

@@ -5,6 +5,7 @@ Menu::~Menu() {
     // Free menu textures
     SDL_DestroyTexture(menuBackgroundTexture);
     SDL_DestroyTexture(startGameButtonTexture);
+	SDL_DestroyTexture(exitButtonTexture);
 }
 
 SDL_Texture* Menu::loadTexture( std::string path )
@@ -38,12 +39,19 @@ Menu::Menu(SDL_Renderer* renderer, int screenWidth, int screenHeight)
     // Load menu background and start game button textures
     menuBackgroundTexture = loadTexture("Backgrounds/4.png");
     startGameButtonTexture = loadTexture("Assets/start_button.png");
-
+	exitButtonTexture = loadTexture("Assets/end_button.png");
     // Set the position and size of the start game button
     startGameButtonRect.x = screenWidth / 2 - 50;
     startGameButtonRect.y = screenHeight / 2 - 25;
     startGameButtonRect.w = 100;
     startGameButtonRect.h = 50;
+
+
+    // Set the position and size of the exit button
+    exitButtonRect.x = screenWidth / 2 - 50;
+    exitButtonRect.y = screenHeight / 2 + 50;
+    exitButtonRect.w = 100;
+    exitButtonRect.h = 50;
 }
 
 void Menu::handleEvents(SDL_Event& e) {
@@ -56,6 +64,12 @@ void Menu::handleEvents(SDL_Event& e) {
             yMouse > startGameButtonRect.y && yMouse < startGameButtonRect.y + startGameButtonRect.h) {
             currentState = PLAYING; // Start the game when the button is clicked
         }
+
+		// Check if the mouse click is within the exit button area
+        if (xMouse > exitButtonRect.x && xMouse < exitButtonRect.x + exitButtonRect.w &&
+            yMouse > exitButtonRect.y && yMouse < exitButtonRect.y + exitButtonRect.h) {
+            currentState = GAME_OVER; // Set game state to exit when the button is clicked
+        }
     }
 }
 
@@ -63,6 +77,7 @@ void Menu::render() {
     // Render menu background and start game button
     SDL_RenderCopy(gRenderer, menuBackgroundTexture, NULL, NULL);
     SDL_RenderCopy(gRenderer, startGameButtonTexture, NULL, &startGameButtonRect);
+	SDL_RenderCopy(gRenderer, exitButtonTexture, NULL, &exitButtonRect);
 }
 
 
@@ -255,6 +270,9 @@ void Game::run( )
 						}
 					}
                     break;
+					case GAME_OVER:
+						quit = true;
+                    	break;
             }
 			
 		}
