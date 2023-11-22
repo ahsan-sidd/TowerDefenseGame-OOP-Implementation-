@@ -2,40 +2,12 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
 #include <time.h>
-
-enum GameState {
-    MENU,
-    PLAYING,
-    GAME_OVER
-};
-
-class Menu {
-public:
-    Menu(SDL_Renderer* renderer, int screenWidth, int screenHeight);
-    ~Menu();
-
-    void handleEvents(SDL_Event& e);
-    void render();
-
-    GameState getCurrentState() const { return currentState; }
-    SDL_Texture* loadTexture( std::string path );
-
-private:
-    SDL_Renderer* gRenderer;
-    SDL_Texture* menuBackgroundTexture;
-    SDL_Texture* startGameButtonTexture;
-    SDL_Rect startGameButtonRect;
-    SDL_Texture* exitButtonTexture;
-    SDL_Rect exitButtonRect;
-    GameState currentState;
-};
-
-
 
 class Game{
     //Screen dimension constants
@@ -54,14 +26,7 @@ class Game{
     //global reference to png image sheets
     SDL_Texture* assets=NULL;
     
-    Menu* menu = NULL;
 
-    // Add additional member variables for the start menu
-    SDL_Texture* startMenuBackgroundTexture;
-    SDL_Texture* startMenuButtonTexture;
-    SDL_Rect startMenuButtonRect;
-    SDL_Texture* exitButtonTexture;
-    SDL_Rect exitButtonRect;
 public:
     Game();
     ~Game();

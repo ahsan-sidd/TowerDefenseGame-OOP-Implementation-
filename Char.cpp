@@ -2,19 +2,23 @@
 #include "Char.hpp"
 #include <vector>
 #include <random>
+#include "HealthBar.hpp"
 // # include <gif-lib.h>
 using namespace std;
-
 
 Unit Walk = {{22,53,79,75},{0,734,99,94}, 0, 0};
 //1.25 multiplication of the width and height from the srcRect to make the characters look more appealing.
 
 vector<Unit> Ninjas;
+vector<Unit> Fighters;
 
 // Initialize counters for animation frames (Used to control the animation status automatically for each object)
 
 int aNum = 0;
 int walkNum = 0;
+
+int fWalk = 0;
+int FaNum = 0;
 
 void Attacking3(SDL_Renderer* gRenderer, SDL_Texture* assets){
     for (Unit& Ninja : Ninjas) {
@@ -37,10 +41,43 @@ void Attacking3(SDL_Renderer* gRenderer, SDL_Texture* assets){
             aNum += 1;
         }
         else if (aNum == 2){
-        Ninja.srcRect = {280, 53, 101, 75};
+            Ninja.srcRect = {280, 53, 101, 75};
             Ninja.moverRect.w = 125;
             Ninja.moverRect.h = 94;
-        aNum = 0;
+            aNum = 0;
+        }
+
+        // assets = game.loadTexture("Assets/Walk.png");
+
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+    }
+}
+
+void FighterAttacking2(SDL_Renderer* gRenderer, SDL_Texture* assets){
+    for (Unit& Ninja : Fighters) {
+        // Update the x-coordinate of the moverRect
+        // if (Ninja.moverRect.x > 1000) {
+        //     Ninja.moverRect.x = 0;
+        // } else {
+        //     Ninja.moverRect.x += 1;
+        //     SDL_Delay(1000);
+        // }
+        if (FaNum == 0){
+            Ninja.srcRect = {22,53,79,75};
+            Ninja.moverRect.w = 99;
+            FaNum += 1;
+        }
+        else if (FaNum == 1){
+            Ninja.srcRect = {151, 53, 100, 75};
+            Ninja.moverRect.w = 125;
+            Ninja.moverRect.h = 94;
+            FaNum += 1;
+        }
+        else if (FaNum == 2){
+            Ninja.srcRect = {280, 53, 101, 75};
+            Ninja.moverRect.w = 125;
+            Ninja.moverRect.h = 94;
+            FaNum = 0;
         }
 
         // assets = game.loadTexture("Assets/Walk.png");
@@ -115,16 +152,99 @@ void Walking(SDL_Renderer* gRenderer, SDL_Texture* assets){
 
         SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
     }
+
+    
 }
 
-void createObject(int x, int y){
-        if (Ninjas.size() == 1){
+void WalkingFighter(SDL_Renderer* gRenderer, SDL_Texture* assets){
+        for (Unit& Ninja : Fighters) {
+        // Update the x-coordinate of the moverRect
+        // if (Ninja.moverRect.x > 1000) {
+        //     Ninja.moverRect.x = 0;
+        // } else {
+        //     Ninja.moverRect.x += 1;
+        //     SDL_Delay(1000);
+        // }
+        if (fWalk == 0){
+            Ninja.srcRect = {26, 45, 48, 83};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 1){
+            Ninja.srcRect = {154, 44, 48, 84};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 2){
+            Ninja.srcRect = {282, 45, 51, 83};
+            Ninja.moverRect.w = 64;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 3){
+            Ninja.srcRect = {410, 46, 48, 82};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 4){
+            Ninja.srcRect = {538, 45, 48, 83};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 5){
+            Ninja.srcRect = {666, 44, 48, 84};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 6){
+            Ninja.srcRect = {794, 45, 52, 83};
+            Ninja.moverRect.w = 64;
+            Ninja.moverRect.h = 104;
+            fWalk += 1;
+        }
+        else if (fWalk == 7){
+            Ninja.srcRect = {922, 46, 48, 82};
+            Ninja.moverRect.w = 60;
+            Ninja.moverRect.h = 104;
+            fWalk = 0;
+        }
+
+        if (Ninja.moverRect.x < (800)){
+        Ninja.moverRect.x += 7;
+        }
+
+        // assets = game.loadTexture("Assets/Walk.png");
+
+        SDL_RenderCopy(gRenderer, assets, &Ninja.srcRect, &Ninja.moverRect);
+    }
+
+    
+}
+
+void createNinja(int x, int y){
+        if (Ninjas.size() == 2){
             return;
         }
         Unit Shinobi = Walk;
         Shinobi.moverRect.x = 0;
         Shinobi.moverRect.y = 734-94;
         Ninjas.push_back(Shinobi);
+}
+
+void createFighter(int x, int y){
+    if (Fighters.size() == 2){
+        return;
+    }
+    Unit Fighter = Walk;
+    Fighter.moverRect.x = 0;
+    Fighter.moverRect.y = 734-94;
+    Fighters.push_back(Fighter);
+
 }
 
 void Attack(SDL_Renderer* gRenderer, SDL_Texture* assets){
@@ -170,125 +290,33 @@ void dropDown(SDL_Renderer* gRenderer, SDL_Texture* assets){
         Ninjas[0].moverRect.y += Ninjas[0].yVelocity;
     return;
 }
-        // if (bee_num == 0) {
-        //     bee.srcRect = {340,160,296,288};
-        // }
 
+    CharacterSprite::CharacterSprite(SDL_Renderer* renderer, const std::string& imagePath, int initialHealth, int speed, int dmg, CharacterType x)
+        : Sprite(renderer, imagePath, initialHealth, speed, dmg), c_Type(x) {}
 
-        // Update the srcRect based on the bee_num
-        // if (bee_num == 0) {
-        //     bee.srcRect = {540, 370, 193, 115};
-        //     bee_num += 1;
-        // } else if (bee_num == 1) {
-        //     bee.srcRect = {527, 138, 194, 115};
-        //     bee_num += 1;
-        // } else if (bee_num == 2) {
-        //     bee.srcRect = {527, 138, 194, 115};
-        //     bee_num = 0;
-        // }
-        
-        // Render the bee on the screen
+    void Sprite::render(SDL_Renderer* renderer){
+            SDL_RenderCopy(renderer, spriteTexture, &Char.srcRect, &Char.moverRect);
+        }
 
-/*
-// Function to draw objects on the screen
-void drawObjects(SDL_Renderer* gRenderer, SDL_Texture* assets) {
-    // Iterate over the bees vector
-    for (Unit& bee : bees) {
-        // Update the x-coordinate of the moverRect
-        if (bee.moverRect.x > 1000) {
-            bee.moverRect.x = 0;
-        } else {
-            bee.moverRect.x += 1;
+    void Sprite::takeDamage(int d){
+            health -= d;
+            if (health <= 0){
+                    //Need to figure out destruction/removal logic
+            }
         }
-        
-        // Update the srcRect based on the bee_num
-        if (bee_num == 0) {
-            bee.srcRect = {540, 370, 193, 115};
-            bee_num += 1;
-        } else if (bee_num == 1) {
-            bee.srcRect = {527, 138, 194, 115};
-            bee_num += 1;
-        } else if (bee_num == 2) {
-            bee.srcRect = {527, 138, 194, 115};
-            bee_num = 0;
-        }
-        
-        // Render the bee on the screen
-        SDL_RenderCopy(gRenderer, assets, &bee.srcRect, &bee.moverRect);
-    }
-    
-    // Iterate over the butterflies vector
-    for (Unit& butterfly : butterflies) {
-        // Update the x-coordinate of the moverRect
-        if (butterfly.moverRect.x > 1000) {
-            butterfly.moverRect.x = 0;
-        } else {
-            butterfly.moverRect.x += 3;
-        }
-        
-        // Update the srcRect based on the butterfly_num
-        if (butterfly_num == 0) {
-            butterfly.srcRect = {257, 24, 173, 134};
-            butterfly_num += 1;
-        } else if (butterfly_num == 1) {
-            butterfly.srcRect = {257, 182, 192, 214};
-            butterfly_num += 1;
-        } else if (butterfly_num == 2) {
-            butterfly.srcRect = {248, 432, 248, 179};
-            butterfly_num = 0;
-        }
-        
-        // Render the butterfly on the screen
-        SDL_RenderCopy(gRenderer, assets, &butterfly.srcRect, &butterfly.moverRect);
-    }
-    
-    // Iterate over the pigeons vector
-    for (Unit& pigeon : pigeons) {
-        // Update the x-coordinate of the moverRect
-        if (pigeon.moverRect.x > 1000) {
-            pigeon.moverRect.x = 0;
-        } else {
-            pigeon.moverRect.x += 5;
-        }
-        
-        // Update the srcRect based on the pigeon_num
-        if (pigeon_num == 0) {
-            pigeon.srcRect = {7, 88, 155, 103};
-            pigeon_num += 1;
-        } else if (pigeon_num == 1) {
-            pigeon.srcRect = {0, 237, 153, 84};
-            pigeon_num += 1;
-        } else if (pigeon_num == 2) {
-            pigeon.srcRect = {2, 361, 159, 124};
-            pigeon_num = 0;
-        }
-        
-        // Render the pigeon on the screen
-        SDL_RenderCopy(gRenderer, assets, &pigeon.srcRect, &pigeon.moverRect);
-    }
-}
 
-// Function to create objects randomly
-void createObject(int x, int y) {
-    // Generate a random number between 0 and 2
-    int num = rand() % 3;
-    
-    // Create an object based on the random number and push it into the corresponding vector
-    if (num == 0) {
-        Unit bee = bee_straight;
-        bee.moverRect.x = x;
-        bee.moverRect.y = y;
-        bees.push_back(bee);
-    } else if (num == 1) {
-        Unit pigeonU = pigeon;
-        pigeonU.moverRect.x = x;
-        pigeonU.moverRect.y = y;
-        pigeons.push_back(pigeonU);
-    } else if (num == 2) {
-        Unit butterfly = butterfly_straight;
-        butterfly.moverRect.x = x;
-        butterfly.moverRect.y = y;
-        butterflies.push_back(butterfly);
+    int Sprite::getHealth() const {return health;}
+
+    Sprite::~Sprite(){
+        SDL_DestroyTexture(spriteTexture);
+        spriteTexture = nullptr;
     }
-}
-*/
+
+    Sprite::Sprite(SDL_Renderer* renderer, const std::string& imgPath, int initialHealth, int Speed, int dmg)
+        : health(initialHealth), movementSpeed(Speed), damage(dmg){
+            
+        spriteTexture = game1.loadTexture(imgPath);
+
+        Char.srcRect = {0,0,0,0};
+        Char.moverRect = {0,0,0,0};
+    }
