@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <SDL_mixer.h>
+#include "MouseClick.hpp"
 
 class Game{
     //Screen dimension constants
@@ -21,6 +22,7 @@ class Game{
 
     //The window renderer
     SDL_Renderer* gRenderer = NULL;
+    SDL_Renderer* mRenderer = NULL;
 
     //Current displayed texture
     SDL_Texture* gTexture = NULL;
@@ -30,11 +32,14 @@ class Game{
     Mix_Music* gameMusic=NULL;
 
     Mix_Music* menuMusic=NULL;
+
+    MouseClick mouseClick;
     
 
 public:
     Game();
     ~Game();
+    bool init(SDL_Renderer* renderer);
     bool init();
     bool loadMedia();
     void close();

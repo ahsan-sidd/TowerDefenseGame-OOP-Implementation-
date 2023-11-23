@@ -3,7 +3,7 @@
 #include "HealthBar.hpp"
 // #include 
 
-Game::Game(){};
+Game::Game():mRenderer(nullptr){};
 Game::~Game(){};
 
 bool Game::init()
@@ -82,6 +82,26 @@ bool Game::init()
 	}
 
 	return success;
+}
+bool Game::init(SDL_Renderer* renderer) {
+    if (renderer == nullptr) {
+        printf("Renderer is null! Cannot initialize the game.\n");
+        return false;
+    }
+
+    mRenderer = renderer;
+
+    // Initialize other game components if needed
+
+    // Initialize the MouseClick instance with the renderer
+    if (!mouseClick.init(mRenderer)) {
+        printf("Failed to initialize MouseClick!\n");
+        return false;
+    }
+
+    // Other initialization logic
+
+    return true;
 }
 
 bool Game::loadMedia()
@@ -214,6 +234,7 @@ bool Game::StartScreen(){
 		}
 
     	while (SDL_PollEvent(&e) != 0) {
+			mouseClick.handleEvent(e);
         	if (e.type == SDL_QUIT) {
             	quit = true;
 				return false;
@@ -223,6 +244,7 @@ bool Game::StartScreen(){
             	SDL_GetMouseState(&xMouse, &yMouse);
             	if (xMouse >= startButtonRect.x && xMouse <= startButtonRect.x + startButtonRect.w && yMouse >= startButtonRect.y && yMouse <= startButtonRect.y + startButtonRect.h) {
 					Mix_FreeMusic(menuMusic);
+					Mix_CloseAudio();
 					Mix_PlayMusic(gameMusic, -1);
                 	quit = true;
             	}
@@ -275,6 +297,7 @@ void Game::run( )
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
+			mouseClick.handleEvent(e);
 			//User requests quit
 			if( e.type == SDL_QUIT )
 			{
