@@ -118,10 +118,115 @@ SDL_Texture* Game::loadTexture( std::string path )
 
 	return newTexture;
 }
+
+bool Game::StartScreen(){
+    assets = loadTexture("Assets/Backgrounds/StartScreen.png");
+    SDL_Texture* startButton = loadTexture("Assets/Backgrounds/StartButton.png");
+	SDL_Texture* intro = loadTexture("Assets/Backgrounds/Intro.png");
+	
+	SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SDL_SetRenderTarget(gRenderer, blackScreen);
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255); // Set the color to black
+    SDL_RenderClear(gRenderer); // Fill the texture with the black color
+    SDL_SetRenderTarget(gRenderer, NULL);
+
+
+
+	if (startButton == NULL) {
+		printf("Failed to load start button texture!\n");
+		return false;
+	}
+
+    SDL_Rect startButtonRect;
+    startButtonRect.x = (1244-222)/2/* x position of the start button */;
+    startButtonRect.y = 590/* y position of the start button */;
+    startButtonRect.w = 222/* width of the start button */;
+    startButtonRect.h = 83/* height of the start button */;
+
+	SDL_Rect introRect;
+	introRect.x = 120/* x position of the start button */;
+	introRect.y = 330/* y position of the start button */;
+	introRect.w = 1020;//222/* width of the start button */;
+	introRect.h = 150;//83/* height of the start button */;
+
+    bool quit = false;
+    bool renderButton = true;
+    SDL_Event e;
+
+	SDL_SetTextureBlendMode(startButton, SDL_BLENDMODE_BLEND);
+	int alpha = 255;
+	int alphaChange = -5;
+
+	SDL_SetTextureBlendMode(intro, SDL_BLENDMODE_BLEND);
+	// SDL_SetTextureAlphaMod(intro, 255);
+	int introAlpha = 0;
+
+	while (!quit) {
+		if (renderButton){
+			SDL_RenderCopy(gRenderer, blackScreen, NULL, NULL);
+
+			SDL_SetTextureAlphaMod(intro, introAlpha);
+			SDL_RenderCopy(gRenderer, intro, NULL, &introRect);
+			while(SDL_PollEvent(&e) != 0){
+				if (e.type == SDL_QUIT){
+					quit = true;
+					return false;
+				}
+				if (e.type == SDL_MOUSEBUTTONDOWN){
+					renderButton = false;
+				}
+			}
+			introAlpha += 1;
+			if (introAlpha >= 255){
+				introAlpha = 255;
+				// introAlpha -= rand() % 1 - 5;
+				
+			}
+			SDL_RenderPresent(gRenderer);
+			SDL_Delay(10);
+			continue;
+		}
+
+    	while (SDL_PollEvent(&e) != 0) {
+        	if (e.type == SDL_QUIT) {
+            	quit = true;
+				return false;
+        	}
+        	if (e.type == SDL_MOUSEBUTTONDOWN) {
+            	int xMouse, yMouse;
+            	SDL_GetMouseState(&xMouse, &yMouse);
+            	if (xMouse >= startButtonRect.x && xMouse <= startButtonRect.x + startButtonRect.w && yMouse >= startButtonRect.y && yMouse <= startButtonRect.y + startButtonRect.h) {
+                	quit = true;
+            	}
+        	}
+    	}
+
+    SDL_RenderCopy(gRenderer, assets, NULL, NULL);
+
+    SDL_SetTextureAlphaMod(startButton, alpha);
+    SDL_RenderCopy(gRenderer, startButton, NULL, &startButtonRect);
+
+    SDL_RenderPresent(gRenderer);
+
+    alpha += alphaChange;
+    if (alpha <= 0 || alpha >= 255) {
+        alphaChange = rand() % 11 - 5; // Random number between -5 and 5
+        // alpha = std::clamp(alpha, 0, 255); // Ensure alpha stays within the valid range
+    }
+	}
+
+    SDL_DestroyTexture(startButton);
+	SDL_DestroyTexture(intro);
+	SDL_DestroyTexture(blackScreen);
+	return true;
+}
+
 void Game::run( )
 {
 	bool quit = false;
 	SDL_Event e;
+
+	int level = 2;
 
 	CharacterState currentState = WALKING;
 
@@ -133,6 +238,12 @@ void Game::run( )
 
 	while( !quit )
 	{
+		if (gTexture != nullptr){
+			SDL_DestroyTexture(gTexture);
+			gTexture = nullptr;
+		}
+		std::string backgroundPath = "Assets/Backgrounds/Level" + std::to_string(level) + ".png";
+		gTexture = loadTexture(backgroundPath);
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
@@ -148,11 +259,15 @@ void Game::run( )
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse,&yMouse);
 					createNinja(xMouse, yMouse);
+					level += 1;
+					// std::cout << "Level: " << level << std::endl;
 				}
 				else if (e.button.button == SDL_BUTTON_RIGHT){
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse,&yMouse);
 					createFighter(xMouse, yMouse);
+					level -= 1;
+					// std::cout << "Level: " << level << std::endl;
 				}
 			}
 			else if (e.type == SDL_KEYDOWN){

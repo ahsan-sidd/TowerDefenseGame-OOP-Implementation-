@@ -30,8 +30,8 @@ enum CharacterType{
 
 struct Unit{
 SDL_Rect srcRect, moverRect;
-float yVelocity;
-float xVelocity;
+float yVelocity; //ignore this for now
+float xVelocity; //ignpre this for now
 CharacterState cState;
 };
 

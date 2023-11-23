@@ -34,6 +34,7 @@ public:
     bool loadMedia();
     void close();
     SDL_Texture* loadTexture( std::string path );
+    bool StartScreen();
     void run();
 };
 
