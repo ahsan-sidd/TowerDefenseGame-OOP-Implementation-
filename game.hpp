@@ -28,6 +28,8 @@ class Game{
     SDL_Texture* assets=NULL;
 
     Mix_Music* gameMusic=NULL;
+
+    Mix_Music* menuMusic=NULL;
     
 
 public:

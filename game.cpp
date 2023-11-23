@@ -68,6 +68,18 @@ bool Game::init()
 		printf("Failed to load game music! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
 	}
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+    }
+	menuMusic = Mix_LoadMUS("Assets/never-forget.mp3");
+
+	if (menuMusic == nullptr)
+	{
+		printf("Failed to load game music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
 
 	return success;
 }
@@ -134,8 +146,8 @@ SDL_Texture* Game::loadTexture( std::string path )
 }
 
 bool Game::StartScreen(){
-    assets = loadTexture("Assets/Backgrounds/StartScreen.png");
-    SDL_Texture* startButton = loadTexture("Assets/Backgrounds/StartButton.png");
+    assets = loadTexture("Assets/Backgrounds/pixel-jess-night-market-start-rng.gif");
+    SDL_Texture* startButton = loadTexture("Assets/yo.png");
 	SDL_Texture* intro = loadTexture("Assets/Backgrounds/Intro.png");
 	
 	SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -143,7 +155,7 @@ bool Game::StartScreen(){
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255); // Set the color to black
     SDL_RenderClear(gRenderer); // Fill the texture with the black color
     SDL_SetRenderTarget(gRenderer, NULL);
-
+	Mix_PlayMusic(menuMusic, -1);
 
 
 	if (startButton == NULL) {
@@ -154,8 +166,8 @@ bool Game::StartScreen(){
     SDL_Rect startButtonRect;
     startButtonRect.x = (1244-222)/2/* x position of the start button */;
     startButtonRect.y = 590/* y position of the start button */;
-    startButtonRect.w = 222/* width of the start button */;
-    startButtonRect.h = 83/* height of the start button */;
+    startButtonRect.w = 222/* width of the start button */;  //222
+    startButtonRect.h = 83/* height of the start button */;   //83
 
 	SDL_Rect introRect;
 	introRect.x = 120/* x position of the start button */;
@@ -210,6 +222,7 @@ bool Game::StartScreen(){
             	int xMouse, yMouse;
             	SDL_GetMouseState(&xMouse, &yMouse);
             	if (xMouse >= startButtonRect.x && xMouse <= startButtonRect.x + startButtonRect.w && yMouse >= startButtonRect.y && yMouse <= startButtonRect.y + startButtonRect.h) {
+					Mix_FreeMusic(menuMusic);
 					Mix_PlayMusic(gameMusic, -1);
                 	quit = true;
             	}
