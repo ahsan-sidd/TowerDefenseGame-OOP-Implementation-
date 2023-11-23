@@ -56,6 +56,18 @@ bool Game::init()
 			}
 		}
 	}
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+    }
+	gameMusic = Mix_LoadMUS("Assets/vanguard-epic-powerful-dark-orchestral.mp3");
+
+	if (gameMusic == nullptr)
+	{
+		printf("Failed to load game music! SDL_mixer Error: %s\n", Mix_GetError());
+		success = false;
+	}
 
 	return success;
 }
@@ -86,8 +98,10 @@ void Game::close()
 	SDL_DestroyRenderer( gRenderer );
 	SDL_DestroyWindow( gWindow );
 	gWindow = NULL;
+	Mix_FreeMusic(gameMusic);
 	gRenderer = NULL;
 	//Quit SDL subsystems
+	Mix_CloseAudio();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -196,6 +210,7 @@ bool Game::StartScreen(){
             	int xMouse, yMouse;
             	SDL_GetMouseState(&xMouse, &yMouse);
             	if (xMouse >= startButtonRect.x && xMouse <= startButtonRect.x + startButtonRect.w && yMouse >= startButtonRect.y && yMouse <= startButtonRect.y + startButtonRect.h) {
+					Mix_PlayMusic(gameMusic, -1);
                 	quit = true;
             	}
         	}
