@@ -66,7 +66,7 @@ bool Game::init()
 		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
     }
-	gameMusic = Mix_LoadMUS("Assets/vanguard-epic-powerful-dark-orchestral.mp3");
+	gameMusic = Mix_LoadMUS("Assets/op.mp3");
 
 	if (gameMusic == nullptr)
 	{
