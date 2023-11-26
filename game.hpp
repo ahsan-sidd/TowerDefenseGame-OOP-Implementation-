@@ -10,11 +10,13 @@
 #include <time.h>
 #include <SDL_mixer.h>
 #include "MouseClick.hpp"
+// #include "cmath"
+// #include "CustomCursor.cpp"
 
 class Game{
     //Screen dimension constants
-    const int SCREEN_WIDTH = (1244); //1000    826     414    896
-    const int SCREEN_HEIGHT = (817); //600;   734     670    640
+    const int SCREEN_WIDTH = (1244); 
+    const int SCREEN_HEIGHT = (817); 
     //ratio of actual value/1.8 is being used.  
 
     //The window we'll be rendering to
@@ -22,7 +24,8 @@ class Game{
 
     //The window renderer
     // SDL_Renderer* gRenderer = NULL;
-    SDL_Renderer* mRenderer = NULL;
+    // SDL_Renderer* mRenderer = NULL;
+
 
     //Current displayed texture
     SDL_Texture* gTexture = NULL;
@@ -34,14 +37,17 @@ class Game{
     Mix_Music* menuMusic=NULL;
 
     MouseClick mouseClick;
-    
+
+    double scaleFactor = 0.5;
+    double positionFactorX = 0.04;
+    double positionFactorY = 0.68;
+
 
 public:
     static SDL_Renderer* gRenderer;
     static SDL_Texture* assets;
     Game();
     ~Game();
-    bool init(SDL_Renderer* renderer);
     bool init();
     bool loadMedia();
     void close();

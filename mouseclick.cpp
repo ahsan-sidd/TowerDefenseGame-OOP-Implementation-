@@ -1,6 +1,6 @@
 #include "MouseClick.hpp"
 
-MouseClick::MouseClick() : renderer(renderer) {
+MouseClick::MouseClick(){
     // Load click sound
     bool success = true;
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -12,10 +12,7 @@ MouseClick::MouseClick() : renderer(renderer) {
     if (clickSound == nullptr) {
         printf("Failed to load click sound! SDL_mixer Error: %s\n", Mix_GetError());
     }
-    cursorTexture = loadTexture("Assets/cursor.png"); // Replace with your cursor texture path
-    if (cursorTexture == nullptr) {
-        printf("Failed to load cursor texture! SDL Error: %s\n", SDL_GetError());
-    }
+    
     cursorRect.x = 0;
     cursorRect.y = 0;
     cursorRect.w = 51; // Adjust to your cursor texture width
@@ -28,14 +25,25 @@ bool MouseClick::init(SDL_Renderer* renderer) {
         return false;
     }
 
-    this->renderer = renderer;
+    // this->renderer = renderer;
+
+    cursorTexture = loadTexture(renderer, "Assets/Cursor.png"); // Replace with your cursor texture path
+    
+    if (cursorTexture == nullptr) {
+        printf("Failed to load cursor texture! SDL Error: %s\n", SDL_GetError());
+        return false;
+    }
+
     return true;
 }
 
 MouseClick::~MouseClick() {
     // Free click sound
     Mix_FreeChunk(clickSound);
-    SDL_DestroyTexture(cursorTexture);
+    if (cursorTexture != nullptr){
+        SDL_DestroyTexture(cursorTexture);
+    }
+    // SDL_DestroyTexture(cursorTexture);
 }
 
 void MouseClick::handleEvent(SDL_Event& e) {
@@ -58,20 +66,23 @@ void MouseClick::playClickSound() {
     Mix_Volume(channel, 128);
 }
 
-void MouseClick::render() {
+void MouseClick::render(SDL_Renderer* renderer) {
     // Get the current mouse position
     int xMouse, yMouse;
     SDL_GetMouseState(&xMouse, &yMouse);
 
+    // std::cout << "cursorRect: " << cursorRect.w << cursorRect.h << std::endl;
+
     // Update the cursor position
     cursorRect.x = xMouse;
     cursorRect.y = yMouse;
+    // cursorRect = {xMouse, yMouse, 51, 50};
 
     // Render the cursor
     SDL_RenderCopy(renderer, cursorTexture, NULL, &cursorRect);
 }
 
-SDL_Texture* MouseClick::loadTexture(const std::string& path) {
+SDL_Texture* MouseClick::loadTexture(SDL_Renderer* renderer ,const std::string& path) {
     SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path

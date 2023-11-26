@@ -4,7 +4,7 @@
 #include "Breakthrough.hpp"
 // #include 
 
-Game::Game():mRenderer(nullptr){};
+Game::Game(){};
 Game::~Game(){};
 SDL_Texture* Game::assets = nullptr;
 SDL_Renderer* Game::gRenderer = nullptr;
@@ -28,7 +28,8 @@ bool Game::init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow( "BreakThrough", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow( "BreakThrough", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+		// SDL_SetWindowFullscreen(gWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -45,20 +46,21 @@ bool Game::init()
 			}
 			else
 			{
+				// SDL_RenderSetLogicalSize(gRenderer, 1080, 720);
 				//Initialize renderer color
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 				//Initialize PNG loading
 				int imgFlags = IMG_INIT_PNG;
-				if( !( IMG_Init( imgFlags ) & imgFlags ) )
+				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
-
 			}
 		}
 	}
+
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
@@ -83,28 +85,11 @@ bool Game::init()
 		printf("Failed to load game music! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
 	}
-
-	return success;
-}
-bool Game::init(SDL_Renderer* renderer) {
-    if (renderer == nullptr) {
-        printf("Renderer is null! Cannot initialize the game.\n");
-        return false;
-    }
-
-    mRenderer = renderer;
-
-    // Initialize other game components if needed
-
-    // Initialize the MouseClick instance with the renderer
-    if (!mouseClick.init(mRenderer)) {
+	if (!mouseClick.init(gRenderer)) {
         printf("Failed to initialize MouseClick!\n");
         return false;
     }
-
-    // Other initialization logic
-
-    return true;
+	return success;
 }
 
 bool Game::loadMedia()
@@ -128,12 +113,13 @@ void Game::close()
 	SDL_DestroyTexture(assets);
 	assets=NULL;
 	SDL_DestroyTexture(gTexture);
-	
 	//Destroy window
 	SDL_DestroyRenderer( gRenderer );
+	// SDL_DestroyRenderer( mRenderer );
 	SDL_DestroyWindow( gWindow );
 	gWindow = NULL;
 	Mix_FreeMusic(gameMusic);
+	gameMusic = NULL;
 	gRenderer = NULL;
 	//Quit SDL subsystems
 	Mix_CloseAudio();
@@ -169,10 +155,19 @@ SDL_Texture* Game::loadTexture( std::string path )
 }
 
 bool Game::StartScreen(){
-    assets = loadTexture("Assets/Backgrounds/pixel-jess-night-market-start-rng.gif");
-    SDL_Texture* startButton = loadTexture("Assets/yo.png");
+
+	SDL_ShowCursor(SDL_DISABLE);
+
+    assets = loadTexture("Assets/Backgrounds/5.png");
+    SDL_Texture* startButton = loadTexture("Assets/Backgrounds/StartButton.png");
 	SDL_Texture* intro = loadTexture("Assets/Backgrounds/Intro.png");
-	
+	SDL_Texture* clouds = loadTexture("Assets/Backgrounds/Clouds.png");
+	SDL_Texture* title = loadTexture("Assets/Backgrounds/Title.png");
+	SDL_Texture* samuraiStart = loadTexture("Assets/Samurai/Run.png");
+	SDL_Texture* shinobiStart = loadTexture("Assets/Shinobi/Run.png");
+	SDL_Texture* fighterStart = loadTexture("Assets/Fighter/Run.png");
+	SDL_Texture* ocean = loadTexture("Assets/Backgrounds/Ocean.png");
+
 	SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_SetRenderTarget(gRenderer, blackScreen);
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255); // Set the color to black
@@ -181,22 +176,51 @@ bool Game::StartScreen(){
 	Mix_PlayMusic(menuMusic, -1);
 
 
+
 	if (startButton == NULL) {
 		printf("Failed to load start button texture!\n");
 		return false;
 	}
 
     SDL_Rect startButtonRect;
-    startButtonRect.x = (1244-222)/2/* x position of the start button */;
-    startButtonRect.y = 590/* y position of the start button */;
-    startButtonRect.w = 222/* width of the start button */;  //222
-    startButtonRect.h = 83/* height of the start button */;   //83
+    startButtonRect.x = (1244-270)/* x position of the start button */;
+    startButtonRect.y = 400/* y position of the start button */;
+    startButtonRect.w = 222/* width of the start button */;
+    startButtonRect.h = 83/* height of the start button */;
 
 	SDL_Rect introRect;
-	introRect.x = 120/* x position of the start button */;
-	introRect.y = 330/* y position of the start button */;
-	introRect.w = 1020;//222/* width of the start button */;
-	introRect.h = 150;//83/* height of the start button */;
+	introRect.x = SCREEN_WIDTH*0.096;//120/* x position of the start button */;
+	introRect.y = SCREEN_HEIGHT*0.404;//330/* y position of the start button */;
+	introRect.w = SCREEN_WIDTH*0.82;//1020;//222/* width of the start button */;
+	introRect.h = SCREEN_HEIGHT*0.184;//150;//83/* height of the start button */;
+
+	SDL_Rect cloudRect;
+	cloudRect.x = 0;
+	cloudRect.y = 0;
+	cloudRect.w = SCREEN_WIDTH;
+	cloudRect.h = SCREEN_HEIGHT;
+
+	SDL_Rect oceanRect;
+	oceanRect.x = 0;
+	oceanRect.y = 0;
+	oceanRect.w = SCREEN_WIDTH;
+	oceanRect.h = SCREEN_HEIGHT;
+
+	SDL_Rect titleRect;
+	titleRect.x = 0;
+	titleRect.y = 400;
+	titleRect.w = 555;
+	titleRect.h = 83;
+
+	SDL_Rect CharacterSrc;
+	CharacterSrc = {0, 0, 128, 128};
+	// int CharacterWidth = 160;//128*scaleFactor;
+	// int CharacterHeight = 160;//128*scaleFactor;
+	// int characterX = SCREEN_WIDTH*positionFactorX;
+	// int characterY = SCREEN_HEIGHT*positionFactorY;
+	SDL_Rect CharacterMover = {50, 558, 160, 160};
+	// Character.moverRect = {characterX, characterY, CharacterWidth, CharacterHeight};
+
 
     bool quit = false;
     bool renderButton = true;
@@ -210,8 +234,14 @@ bool Game::StartScreen(){
 	// SDL_SetTextureAlphaMod(intro, 255);
 	int introAlpha = 0;
 
+	int frameCount = 0;
+	int animationDelay = 0;
+
+
 	while (!quit) {
+
 		if (renderButton){
+			
 			SDL_RenderCopy(gRenderer, blackScreen, NULL, NULL);
 
 			SDL_SetTextureAlphaMod(intro, introAlpha);
@@ -224,6 +254,17 @@ bool Game::StartScreen(){
 				if (e.type == SDL_MOUSEBUTTONDOWN){
 					renderButton = false;
 				}
+				//on window resizing adjust rects relative to window size
+				else if (e.type == SDL_WINDOWEVENT){
+					if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
+						int w = e.window.data1;
+						int h = e.window.data2;
+						introRect.x = w*0.096;//120/* x position of the start button */;
+						introRect.y = h*0.404;//330/* y position of the start button */;
+						introRect.w = w*0.82;//1020;//222/* width of the start button */;
+						introRect.h = h*0.184;//150;//83/* height of the start button */;
+					}
+				}
 			}
 			introAlpha += 1;
 			if (introAlpha >= 255){
@@ -231,8 +272,9 @@ bool Game::StartScreen(){
 				// introAlpha -= rand() % 1 - 5;
 				
 			}
+			mouseClick.render(gRenderer);
 			SDL_RenderPresent(gRenderer);
-			SDL_Delay(10);
+			SDL_Delay(15);
 			continue;
 		}
 
@@ -249,15 +291,69 @@ bool Game::StartScreen(){
 					Mix_FreeMusic(menuMusic);
 					Mix_CloseAudio();
 					Mix_PlayMusic(gameMusic, -1);
-                	quit = true;
+					quit = true;
             	}
+			
         	}
+			else if (e.type == SDL_WINDOWEVENT){
+				if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
+					int w = e.window.data1;
+					int h = e.window.data2;
+					cloudRect.w = w;
+					cloudRect.h = h;
+					// cloudRect2.w = w;
+					// cloudRect2.h = h*1.004;
+				}
+			}
     	}
 
+	cloudRect.x -= 1;
+	oceanRect.x -= 1;
+	if (cloudRect.x < 0){
+		cloudRect.x = SCREEN_WIDTH;
+		oceanRect.x = SCREEN_WIDTH;
+	}
+	SDL_Rect cloudRect2 = cloudRect;
+	cloudRect2.x -= SCREEN_WIDTH;
+	SDL_Rect oceanRect2 = oceanRect;
+	oceanRect2.x -= SCREEN_WIDTH;
+
     SDL_RenderCopy(gRenderer, assets, NULL, NULL);
+	SDL_RenderCopy(gRenderer, clouds, NULL, &cloudRect2);
+	SDL_RenderCopy(gRenderer, clouds, NULL, &cloudRect);
+
+	SDL_RenderCopy(gRenderer, ocean, NULL, &oceanRect);
+	SDL_RenderCopy(gRenderer, ocean, NULL, &oceanRect2);
+
+	SDL_RenderCopy(gRenderer, title, NULL, &titleRect);
+
+	SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &CharacterMover);
+	CharacterMover.x += 100;
+	SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &CharacterMover);
+	CharacterMover.x += 100;
+	SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &CharacterMover);
+	CharacterMover.x = 50;
+
+	if (animationDelay == 6){
+
+	frameCount++;
+	if (frameCount % 8 == 0){
+		CharacterSrc.x = 0;
+		CharacterSrc.y = 0;
+	}
+	else{
+		CharacterSrc.x += 128;
+	}
+		// Character.srcRect.x += 128;
+		animationDelay = 0;
+	}
+	animationDelay++;
+
 
     SDL_SetTextureAlphaMod(startButton, alpha);
     SDL_RenderCopy(gRenderer, startButton, NULL, &startButtonRect);
+
+	mouseClick.render(gRenderer);
 
     SDL_RenderPresent(gRenderer);
 
@@ -266,11 +362,18 @@ bool Game::StartScreen(){
         alphaChange = rand() % 11 - 5; // Random number between -5 and 5
         // alpha = std::clamp(alpha, 0, 255); // Ensure alpha stays within the valid range
     }
+	SDL_Delay(10);
 	}
 
+	SDL_DestroyTexture(samuraiStart);
+	SDL_DestroyTexture(shinobiStart);
+	SDL_DestroyTexture(fighterStart);
     SDL_DestroyTexture(startButton);
 	SDL_DestroyTexture(intro);
 	SDL_DestroyTexture(blackScreen);
+	SDL_DestroyTexture(clouds);
+	SDL_DestroyTexture(title);
+	SDL_DestroyTexture(ocean);
 	return true;
 }
 
@@ -390,12 +493,13 @@ void Game::run( )
 		// Walking(gRenderer, assets);
 
 		//****************************************************************
+		mouseClick.render(gRenderer);
 		healthbar.render();
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
-	    SDL_Delay(200);	//causes sdl engine to delay for specified miliseconds
-
+	    SDL_Delay(20);	//causes sdl engine to delay for specified miliseconds
+		//SDL_Delay can be lowered to 10-20 for smoother animation
 	}
 			
 }
