@@ -1,10 +1,13 @@
 #include "game.hpp"
 #include "Char.hpp"
 #include "HealthBar.hpp"
+#include "Breakthrough.hpp"
 // #include 
 
 Game::Game():mRenderer(nullptr){};
 Game::~Game(){};
+SDL_Texture* Game::assets = nullptr;
+SDL_Renderer* Game::gRenderer = nullptr;
 
 bool Game::init()
 {
@@ -278,7 +281,11 @@ void Game::run( )
 
 	int level = 2;
 
-	CharacterState currentState = WALKING;
+	Breakthrough breakthrough;
+
+	assets = loadTexture("Assets/Samurai/Walk.png");
+
+	// CharacterState currentState = WALKING;
 
 	// char* fontpath = "FreeSans.ttf";
 	// TTF_Init();
@@ -306,78 +313,80 @@ void Game::run( )
 
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 			//this is a good location to add pigeon in linked list.
-				if (e.button.button == SDL_BUTTON_LEFT){
+				if (e.button.button == SDL_BUTTON_LEFT)
+				{
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse,&yMouse);
-					createNinja(xMouse, yMouse);
-					level += 1;
+					breakthrough.createObject(xMouse, yMouse);
+					// level += 1;
 					// std::cout << "Level: " << level << std::endl;
 				}
-				else if (e.button.button == SDL_BUTTON_RIGHT){
-					int xMouse, yMouse;
-					SDL_GetMouseState(&xMouse,&yMouse);
-					createFighter(xMouse, yMouse);
-					level -= 1;
-					// std::cout << "Level: " << level << std::endl;
-				}
+				// else if (e.button.button == SDL_BUTTON_RIGHT){
+				// 	int xMouse, yMouse;
+				// 	SDL_GetMouseState(&xMouse,&yMouse);
+				// 	createFighter(xMouse, yMouse);
+				// 	level -= 1;
+				// 	// std::cout << "Level: " << level << std::endl;
+				// }
 			}
-			else if (e.type == SDL_KEYDOWN){
-				switch(e.key.keysym.sym){
-				case (SDLK_UP):
-				std::cout << "UP pressed" << std::endl;
-				// assets = loadTexture("Assets/Samurai/Walk.png");
-				// Walking(gRenderer, assets);
-				// Jump(gRenderer, assets);
-				currentState = ATTACKING;
-				break;
+			// else if (e.type == SDL_KEYDOWN)
+			// {
+			// 	switch(e.key.keysym.sym){
+			// 	case (SDLK_UP):
+			// 	std::cout << "UP pressed" << std::endl;
+			// 	// assets = loadTexture("Assets/Samurai/Walk.png");
+			// 	// Walking(gRenderer, assets);
+			// 	// Jump(gRenderer, assets);
+			// 	currentState = ATTACKING;
+			// 	break;
 
-				case (SDLK_DOWN):
-				// dropDown(gRenderer, assets);
-				std::cout << "Down pressed" << std::endl;
-				currentState = WALKING;
-				// assets = loadTexture("Assets/Samurai/Attack_3.png");
-				// Attacking3(gRenderer, assets);
-				break;
+			// 	case (SDLK_DOWN):
+			// 	// dropDown(gRenderer, assets);
+			// 	std::cout << "Down pressed" << std::endl;
+			// 	currentState = WALKING;
+			// 	// assets = loadTexture("Assets/Samurai/Attack_3.png");
+			// 	// Attacking3(gRenderer, assets);
+			// 	break;
 
-				case (SDLK_RIGHT):
-				moveRight(gRenderer, assets);
-				std::cout << "Right pressed" << std::endl;
-				break;
+			// 	case (SDLK_RIGHT):
+			// 	moveRight(gRenderer, assets);
+			// 	std::cout << "Right pressed" << std::endl;
+			// 	break;
 
-				case (SDLK_LEFT):
-				moveLeft(gRenderer, assets);
-				std::cout << "Left pressed" << std::endl;
-				break;
+			// 	case (SDLK_LEFT):
+			// 	moveLeft(gRenderer, assets);
+			// 	std::cout << "Left pressed" << std::endl;
+			// 	break;
 
-				case (SDLK_SPACE):
-				Jump(gRenderer, assets);
-				std::cout << "Space pressed" << std::endl;
-				break;
-				}
-			}
+			// 	case (SDLK_SPACE):
+			// 	Jump(gRenderer, assets);
+			// 	std::cout << "Space pressed" << std::endl;
+			// 	break;
+			// 	}
+			// }
 			
 		}
 
-
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
+		breakthrough.drawObjects();
 		//***********************draw the objects here********************
 
-		switch (currentState){
-			case WALKING:
-				assets = loadTexture("Assets/Samurai/Walk.png");
-				Walking(gRenderer, assets);
-				assets = loadTexture("Assets/Fighter/Walk.png");
-				WalkingFighter(gRenderer, assets);
-				break;
-			case ATTACKING:
-				assets = loadTexture("Assets/Samurai/Attack_3.png");
-				Attacking3(gRenderer, assets);
-				healthbar.reduce_health();
-				assets = loadTexture("Assets/Fighter/Attack_2.png");
-				FighterAttacking2(gRenderer, assets);
-				break;
-		}
+		// switch (currentState){
+		// 	case WALKING:
+		// 		assets = loadTexture("Assets/Samurai/Walk.png");
+		// 		Walking(gRenderer, assets);
+		// 		assets = loadTexture("Assets/Fighter/Walk.png");
+		// 		WalkingFighter(gRenderer, assets);
+		// 		break;
+		// 	case ATTACKING:
+		// 		assets = loadTexture("Assets/Samurai/Attack_3.png");
+		// 		Attacking3(gRenderer, assets);
+		// 		healthbar.reduce_health();
+		// 		assets = loadTexture("Assets/Fighter/Attack_2.png");
+		// 		FighterAttacking2(gRenderer, assets);
+		// 		break;
+		// }
 		// Walking(gRenderer, assets);
 
 		//****************************************************************
