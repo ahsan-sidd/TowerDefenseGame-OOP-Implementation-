@@ -19,7 +19,7 @@ public:
     void renderMenuScreen(SDL_Renderer* gRenderer, SDL_Event& e);
 private:
     bool isDragging = false;
-    SDL_Rect sliderRect = {476, 318, 24, 24};
+    SDL_Rect sliderRect = {475, 314, 32, 32};
     int sliderStartX = sliderRect.x;
     int sliderEndX = sliderRect.x + 266;
     SDL_Rect MenuButtonRect;
