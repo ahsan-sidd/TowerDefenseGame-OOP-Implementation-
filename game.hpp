@@ -10,13 +10,14 @@
 #include <time.h>
 #include <SDL_mixer.h>
 #include "MouseClick.hpp"
+#include "Menu.hpp"
 // #include "cmath"
 // #include "CustomCursor.cpp"
 
 class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = (1244); 
-    const int SCREEN_HEIGHT = (817); 
+    const int SCREEN_HEIGHT = (818); 
     //ratio of actual value/1.8 is being used.  
 
     //The window we'll be rendering to
@@ -54,5 +55,11 @@ public:
     SDL_Texture* loadTexture( std::string path );
     bool StartScreen();
     void run();
+
+    enum GameState{
+        MENU,
+        GAME,
+        QUIT
+    };
 };
 

@@ -67,6 +67,7 @@ bool Game::init()
 		success = false;
     }
 	gameMusic = Mix_LoadMUS("Assets/op.mp3");
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 3);
 
 	if (gameMusic == nullptr)
 	{
@@ -472,6 +473,8 @@ bool Game::StartScreen(){
 
 void Game::run( )
 {
+	GameState currentState = GAME;
+
 	bool quit = false;
 	SDL_Event e;
 
@@ -489,6 +492,10 @@ void Game::run( )
 
 	HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 
+	Menu menu;
+	if (!menu.init(gRenderer)) {
+		printf("Failed to initialize Menu!\n");
+	}
 	while( !quit )
 	{
 		if (gTexture != nullptr){
@@ -499,14 +506,20 @@ void Game::run( )
 		gTexture = loadTexture(backgroundPath);
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
-		{
+		{	
 			mouseClick.handleEvent(e);
 			//User requests quit
 			if( e.type == SDL_QUIT )
 			{
 				quit = true;
 			}
-
+			if (menu.handleEvent(e)){
+				currentState = MENU;
+			}
+			else if (currentState == MENU && e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+            // The escape key was pressed while in the menu state, switch back to the gameplay state
+            currentState = GAME;
+        	}
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 			//this is a good location to add pigeon in linked list.
 				if (e.button.button == SDL_BUTTON_LEFT)
@@ -517,6 +530,7 @@ void Game::run( )
 					// level += 1;
 					// std::cout << "Level: " << level << std::endl;
 				}
+			}
 				// else if (e.button.button == SDL_BUTTON_RIGHT){
 				// 	int xMouse, yMouse;
 				// 	SDL_GetMouseState(&xMouse,&yMouse);
@@ -524,7 +538,7 @@ void Game::run( )
 				// 	level -= 1;
 				// 	// std::cout << "Level: " << level << std::endl;
 				// }
-			}
+			
 			// else if (e.type == SDL_KEYDOWN)
 			// {
 			// 	switch(e.key.keysym.sym){
@@ -586,6 +600,16 @@ void Game::run( )
 		// Walking(gRenderer, assets);
 
 		//****************************************************************
+		if (currentState == MENU){
+			menu.renderMenuScreen(gRenderer, e);
+			mouseClick.render(gRenderer);
+			SDL_RenderPresent(gRenderer);
+			SDL_Delay(20);
+			continue;
+		}
+
+
+		menu.render(gRenderer);
 		mouseClick.render(gRenderer);
 		healthbar.render();
 
