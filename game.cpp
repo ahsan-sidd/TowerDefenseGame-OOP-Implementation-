@@ -164,8 +164,11 @@ bool Game::StartScreen(){
 	SDL_Texture* clouds = loadTexture("Assets/Backgrounds/Clouds.png");
 	SDL_Texture* title = loadTexture("Assets/Backgrounds/Title.png");
 	SDL_Texture* samuraiStart = loadTexture("Assets/Samurai/Run.png");
+	SDL_Texture* samuraiJump = loadTexture("Assets/Samurai/Jump.png");
 	SDL_Texture* shinobiStart = loadTexture("Assets/Shinobi/Run.png");
+	SDL_Texture* shinobiJump = loadTexture("Assets/Shinobi/Jump.png");
 	SDL_Texture* fighterStart = loadTexture("Assets/Fighter/Run.png");
+	SDL_Texture* fighterJump = loadTexture("Assets/Fighter/Jump.png");
 	SDL_Texture* ocean = loadTexture("Assets/Backgrounds/Ocean.png");
 
 	SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -181,6 +184,13 @@ bool Game::StartScreen(){
 		printf("Failed to load start button texture!\n");
 		return false;
 	}
+
+	Mix_Chunk* jumpSound = Mix_LoadWAV("Assets/Jump.wav");
+	if (jumpSound == nullptr) {
+		printf("Failed to load jump sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+	}
+	Mix_VolumeChunk(jumpSound, MIX_MAX_VOLUME / 1.5);
+
 
     SDL_Rect startButtonRect;
     startButtonRect.x = (1244-270)/* x position of the start button */;
@@ -218,7 +228,17 @@ bool Game::StartScreen(){
 	// int CharacterHeight = 160;//128*scaleFactor;
 	// int characterX = SCREEN_WIDTH*positionFactorX;
 	// int characterY = SCREEN_HEIGHT*positionFactorY;
-	SDL_Rect CharacterMover = {50, 558, 160, 160};
+	int samuraiYVelocity = 0;
+	bool samuraiJumping = false;
+	SDL_Rect samuraiRect = {50, 558, 160, 160};
+
+	int shinobiYVelocity = 0;
+	bool shinobiJumping = false;
+	SDL_Rect shinobiRect = {150, 558, 160, 160};
+
+	int fighterYVelocity = 0;
+	bool fighterJumping = false;
+	SDL_Rect fighterRect = {250, 558, 160, 160};
 	// Character.moverRect = {characterX, characterY, CharacterWidth, CharacterHeight};
 
 
@@ -235,6 +255,7 @@ bool Game::StartScreen(){
 	int introAlpha = 0;
 
 	int frameCount = 0;
+	int characterFrame = 8;
 	int animationDelay = 0;
 
 
@@ -293,8 +314,25 @@ bool Game::StartScreen(){
 					Mix_PlayMusic(gameMusic, -1);
 					quit = true;
             	}
-			
-        	}
+				else if (xMouse >= samuraiRect.x+30 && xMouse <= samuraiRect.x + samuraiRect.w-30 && yMouse >= samuraiRect.y+30 && yMouse <= samuraiRect.y + samuraiRect.h-30) {
+       				samuraiYVelocity = -20; // Adjust as needed
+        			samuraiJumping = true;
+					// characterFrame = 12;
+					Mix_PlayChannel(-1, jumpSound, 0);
+    			}
+				else if (xMouse >= shinobiRect.x+30 && xMouse <= shinobiRect.x + shinobiRect.w-30 && yMouse >= shinobiRect.y+30 && yMouse <= shinobiRect.y + shinobiRect.h-30) {
+	   				shinobiYVelocity = -20; // Adjust as needed
+					shinobiJumping = true;
+					// characterFrame = 12;
+					Mix_PlayChannel(-1, jumpSound, 0);
+        		}
+				else if (xMouse >= fighterRect.x+30 && xMouse <= fighterRect.x + fighterRect.w-30 && yMouse >= fighterRect.y+30 && yMouse <= fighterRect.y + fighterRect.h-30) {
+					fighterYVelocity = -20; // Adjust as needed
+					fighterJumping = true;
+					// characterFrame = 12;
+					Mix_PlayChannel(-1, jumpSound, 0);
+				}
+			}
 			else if (e.type == SDL_WINDOWEVENT){
 				if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
 					int w = e.window.data1;
@@ -327,12 +365,62 @@ bool Game::StartScreen(){
 
 	SDL_RenderCopy(gRenderer, title, NULL, &titleRect);
 
-	SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &CharacterMover);
-	CharacterMover.x += 100;
-	SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &CharacterMover);
-	CharacterMover.x += 100;
-	SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &CharacterMover);
-	CharacterMover.x = 50;
+	if (samuraiYVelocity < 20 and samuraiJumping){
+		samuraiYVelocity += 1;
+	}
+
+	// Always check if the character has reached the ground
+	samuraiRect.y += samuraiYVelocity;
+	if (samuraiRect.y >= 558){
+		samuraiRect.y = 558;
+		samuraiJumping = false;
+		samuraiYVelocity = 0; // Reset the velocity so the character doesn't continue to move downwards
+		// characterFrame = 8;
+	}
+
+	// Render the character with the current texture
+	if (samuraiJumping){
+		SDL_RenderCopy(gRenderer, samuraiJump, &CharacterSrc, &samuraiRect);
+	}
+	else{
+		SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &samuraiRect);   
+	}
+	// SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &samuraiRect);
+	// CharacterMover.x += 100;
+	if (shinobiYVelocity < 20 and shinobiJumping){
+		shinobiYVelocity += 1;
+	}
+	shinobiRect.y += shinobiYVelocity;
+	if (shinobiRect.y >= 558){
+		shinobiRect.y = 558;
+		shinobiJumping = false;
+		shinobiYVelocity = 0; // Reset the velocity so the character doesn't continue to move downwards
+	}
+	if (shinobiJumping){
+		SDL_RenderCopy(gRenderer, shinobiJump, &CharacterSrc, &shinobiRect);
+	}
+	else{
+		SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &shinobiRect);   
+	}
+	// SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &shinobiRect);
+	// CharacterMover.x += 100;
+	if (fighterYVelocity < 20 and fighterJumping){
+		fighterYVelocity += 1;
+	}
+	fighterRect.y += fighterYVelocity;
+	if (fighterRect.y >= 558){
+		fighterRect.y = 558;
+		fighterJumping = false;
+		fighterYVelocity = 0; // Reset the velocity so the character doesn't continue to move downwards
+	}
+	if (fighterJumping){
+		SDL_RenderCopy(gRenderer, fighterJump, &CharacterSrc, &fighterRect);
+	}
+	else{
+		SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &fighterRect);   
+	}
+	// SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &fighterRect);
+	// CharacterMover.x = 50;
 
 	if (animationDelay == 6){
 
@@ -365,9 +453,14 @@ bool Game::StartScreen(){
 	SDL_Delay(10);
 	}
 
+	Mix_FreeChunk(jumpSound);
+
 	SDL_DestroyTexture(samuraiStart);
+	SDL_DestroyTexture(samuraiJump);
 	SDL_DestroyTexture(shinobiStart);
+	SDL_DestroyTexture(shinobiJump);
 	SDL_DestroyTexture(fighterStart);
+	SDL_DestroyTexture(fighterJump);
     SDL_DestroyTexture(startButton);
 	SDL_DestroyTexture(intro);
 	SDL_DestroyTexture(blackScreen);
