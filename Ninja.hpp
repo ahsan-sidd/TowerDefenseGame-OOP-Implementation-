@@ -6,7 +6,10 @@ class Ninja : public Unit{
     // SDL_Rect srcRect, moverRect;
     int movement_frame = 0;
     int movement_speed = 10;
-    int attack_frame = 0;
+    // int attack_frame = 0;
+    int WanimationDelay = 0;
+    int AanimationDelay = 0;
+    int frameCount = 0;
 
 public:
     // add the fly function here as well.

@@ -10,7 +10,7 @@ Unit* ObjectCreator::getObject(int new_x, int new_y)
     {
         // Unit pigeon = {{7, 88, 155, 103}, {new_x, new_y, 50, 50}};
         // return &pigeon;
-        return new Ninja({26, 45, 48, 83}, {new_x, 640, 60, 104});
+        return new Ninja({0, 0, 128, 128}, {new_x, 558, 160, 160});
     }
     // else if (random == 1)
     // {
