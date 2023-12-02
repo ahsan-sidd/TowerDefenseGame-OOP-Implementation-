@@ -22,11 +22,16 @@ void HealthBar::render()
 {
     // Draw background rectangle (healthbar) of white color
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_Rect bg_healthbar = {x, y, max_health, 20};
+    SDL_Rect bg_healthbar = {x, y, max_health, 10};
     SDL_RenderFillRect(renderer, &bg_healthbar);
 
     // Draw a green rectangle represnting health, inside / on top of the background of healthbar
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_Rect healthbar = {x, y, current_health, 20};
+    SDL_Rect healthbar = {x, y, current_health, 10};
     SDL_RenderFillRect(renderer, &healthbar);
+}
+
+void HealthBar::set_x(int value)
+{
+    x += value;
 }

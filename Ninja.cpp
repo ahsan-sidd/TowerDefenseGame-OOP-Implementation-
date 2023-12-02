@@ -1,6 +1,7 @@
+#include "game.hpp"
 #include "Ninja.hpp"
 #include <iostream>
-#include "game.hpp"
+#include "HealthBar.hpp"
 // pigeon implementation will go here.
 
 
@@ -16,6 +17,8 @@ Game game;
 void Ninja::draw(Unit* ptr)
 {
     SDL_RenderCopy(Game::gRenderer, Game::assets, &ptr->get_src(), &ptr->get_mover());
+    // std::cout << "health " << ch << " ";
+    hb.render();
 }
 
 void Ninja::move(){
@@ -40,6 +43,7 @@ void Ninja::move(){
 		WanimationDelay = 0;
 	}
     get_mover().x += 7;
+    hb.set_x(7);
 	WanimationDelay++;}
     else{
         attack();
@@ -90,7 +94,7 @@ void Ninja::attack()
 }
 
     // src coorinates from assets.png file, they have been found using spritecow.com
-Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m){
+Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m), srcRect{s}, moverRect{m}, hb(Game::gRenderer, moverRect.x + 40, moverRect.y - 5, current_health, max_health){
     // srcRect = s;
     // moverRect = m;
     // srcRect = {7,88,160,103};

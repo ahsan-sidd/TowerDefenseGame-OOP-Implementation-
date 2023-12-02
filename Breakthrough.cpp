@@ -42,7 +42,6 @@ void Breakthrough::detect_collision()
                 delete *bulletIter;
                 *bulletIter = nullptr;
                 bulletIter = bullets_list.erase(bulletIter);
-                cout << "length of list: " << bullets_list.size() << '\n';
             }
 
             // check for next bullet in the list
