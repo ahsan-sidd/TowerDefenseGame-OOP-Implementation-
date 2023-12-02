@@ -1,11 +1,16 @@
 #include <iostream>
 #include "Breakthrough.hpp"
 #include "ObjectCreator.hpp"
-
+#include <string>
 void Breakthrough::drawObjects()
 {
     // call draw functions of all the objects here
     for (Unit* unit : characters_list) {
+        unit->draw(unit);
+        unit->move();
+    }
+
+    for (Unit* unit : bullets_list) {
         unit->draw(unit);
         unit->move();
     }
@@ -15,7 +20,7 @@ void Breakthrough::drawObjects()
 // creates new objects 
 
 
-void Breakthrough::createObject(int x, int y)
+void Breakthrough::createObject(int x, int y, string object_to_create)
 {
     // int random = rand() % 3;
     // if (random == 0)
@@ -35,9 +40,16 @@ void Breakthrough::createObject(int x, int y)
     // }
 
     ObjectCreator oc;
-    Unit* ptr = oc.getObject(x, y);
-    characters_list.push_back(ptr);
-    std::cout << "length: " << characters_list.size() << "\n";
+    Unit* ptr = oc.getObject(x, y, object_to_create);
+    if (object_to_create == "character")
+    {
+        characters_list.push_back(ptr);
+    }
+    else if (object_to_create == "bullet")
+    {
+        bullets_list.push_back(ptr);   
+    }
+    std::cout << "length: " << bullets_list.size() << "\n";
     std::cout << ptr << "\n";
     std::cout << "Mouse clicked at: " << x << " -- " << y << std::endl;
 }

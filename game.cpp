@@ -2,6 +2,7 @@
 #include "Char.hpp"
 #include "HealthBar.hpp"
 #include "Breakthrough.hpp"
+#include <string>
 // #include 
 
 Game::Game(){};
@@ -482,6 +483,9 @@ void Game::run( )
 
 	Breakthrough breakthrough;
 
+	Uint32 current_time;
+	Uint32 bullet_time = SDL_GetTicks();
+
 	assets = loadTexture("Assets/Samurai/Walk.png");
 
 	// CharacterState currentState = WALKING;
@@ -498,6 +502,7 @@ void Game::run( )
 	}
 	while( !quit )
 	{
+		current_time = SDL_GetTicks();
 		if (gTexture != nullptr){
 			SDL_DestroyTexture(gTexture);
 			gTexture = nullptr;
@@ -526,7 +531,7 @@ void Game::run( )
 				{
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse,&yMouse);
-					breakthrough.createObject(xMouse, yMouse);
+					breakthrough.createObject(xMouse, yMouse, "character");
 					// level += 1;
 					// std::cout << "Level: " << level << std::endl;
 				}
@@ -579,7 +584,14 @@ void Game::run( )
 
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
+		
+		if (current_time - bullet_time >= 2000)
+		{
+			breakthrough.createObject(800, 400, "bullet");
+			bullet_time = current_time;
+		}
 		breakthrough.drawObjects();
+
 		//***********************draw the objects here********************
 
 		// switch (currentState){
@@ -604,7 +616,7 @@ void Game::run( )
 			menu.renderMenuScreen(gRenderer, e);
 			mouseClick.render(gRenderer);
 			SDL_RenderPresent(gRenderer);
-			SDL_Delay(20);
+			SDL_Delay(10);
 			continue;
 		}
 
@@ -615,7 +627,7 @@ void Game::run( )
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
-	    SDL_Delay(20);	//causes sdl engine to delay for specified miliseconds
+	    SDL_Delay(10);	//causes sdl engine to delay for specified miliseconds
 		//SDL_Delay can be lowered to 10-20 for smoother animation
 	}
 			

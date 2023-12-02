@@ -13,6 +13,11 @@
 // fly() is overrided from the superclass
 Game game;
 
+void Ninja::draw(Unit* ptr)
+{
+    SDL_RenderCopy(Game::gRenderer, Game::assets, &ptr->get_src(), &ptr->get_mover());
+}
+
 void Ninja::move(){
     //Attack when the sprite reaches x=850
     get_src().w = 128;

@@ -2,6 +2,7 @@
 #include<vector>
 #include<list>
 #include "Unit.hpp"
+#include <string>
 using namespace std;
 
 class Breakthrough{
@@ -13,8 +14,9 @@ class Breakthrough{
     //Create your list here
     public:
     list<Unit*> characters_list;
+    list<Unit*> bullets_list;
     void drawObjects(); 
-    void createObject(int x, int y);
+    void createObject(int x, int y, string object_to_create);
     ~Breakthrough();
     
     // create destructor which deletes all dynamic objects

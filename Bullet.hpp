@@ -1,21 +1,18 @@
 #include<SDL.h>
 #include "game.hpp"
 #include "Unit.hpp"
-class Ninja : public Unit{
+class Bullet : public Unit{
 
-    // SDL_Rect srcRect, moverRect;
+    SDL_Rect srcRect, moverRect;
+    SDL_Texture* bulletTexture;
     int movement_frame = 0;
     int movement_speed = 10;
-    // int attack_frame = 0;
-    int WanimationDelay = 0;
-    int AanimationDelay = 0;
-    int frameCount = 0;
 
 public:
     // add the fly function here as well.
     void draw(Unit* ptr);
     void move();
     void attack();
-    Ninja(SDL_Rect s, SDL_Rect m); 
+    Bullet(SDL_Rect s, SDL_Rect m, SDL_Texture* texture);
     // may add other overloaded constructors here... 
 };
