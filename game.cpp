@@ -591,6 +591,7 @@ void Game::run( )
 			bullet_time = current_time;
 		}
 		breakthrough.drawObjects();
+		breakthrough.detect_collision();
 
 		//***********************draw the objects here********************
 

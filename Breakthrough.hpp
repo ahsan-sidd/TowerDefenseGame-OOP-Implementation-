@@ -16,6 +16,7 @@ class Breakthrough{
     list<Unit*> characters_list;
     list<Unit*> bullets_list;
     void drawObjects(); 
+    void detect_collision();
     void createObject(int x, int y, string object_to_create);
     ~Breakthrough();
     

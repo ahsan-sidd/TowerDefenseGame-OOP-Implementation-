@@ -13,6 +13,7 @@ public:
     virtual void draw(Unit* ptr) = 0;
     virtual void move() = 0;
     virtual void attack() = 0;
+    // bool checkCollision(const Unit* other) const;
     SDL_Rect& get_src();
     SDL_Rect& get_mover();
 };

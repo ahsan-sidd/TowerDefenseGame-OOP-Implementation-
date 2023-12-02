@@ -13,8 +13,47 @@ void Breakthrough::drawObjects()
     for (Unit* unit : bullets_list) {
         unit->draw(unit);
         unit->move();
+        detect_collision();
     }
 }
+
+void Breakthrough::detect_collision()
+{
+    // if (!characters_list.empty() && !bullets_list.empty())
+    // {
+    //     for (Unit* unit : bullets_list)
+    //     {
+    //         if (unit->get_mover().x < characters_list.front()->get_mover().x)
+    //         {
+    //             cout << "collision ";
+    //         }
+    //     }
+    // }
+
+    if (!characters_list.empty() && !bullets_list.empty())
+    {
+        for (auto bulletIter = bullets_list.begin(); bulletIter != bullets_list.end();)
+        {
+            auto firstCharacter = characters_list.begin();
+            
+            // check for collision and remove bullet from screen and list if collision detected
+            if ((*bulletIter)->get_mover().x < (*firstCharacter)->get_mover().x + 80)
+            {
+                delete *bulletIter;
+                *bulletIter = nullptr;
+                bulletIter = bullets_list.erase(bulletIter);
+                cout << "length of list: " << bullets_list.size() << '\n';
+            }
+
+            // check for next bullet in the list
+            else
+            {
+                bulletIter++;
+            }
+        }
+    }
+}
+
 
 
 // creates new objects 
