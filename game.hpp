@@ -11,6 +11,7 @@
 #include <SDL_mixer.h>
 #include "MouseClick.hpp"
 #include "Menu.hpp"
+#include "Tower.hpp"
 // #include "cmath"
 // #include "CustomCursor.cpp"
 
@@ -39,10 +40,10 @@ class Game{
 
     MouseClick mouseClick;
 
+
     double scaleFactor = 0.5;
     double positionFactorX = 0.04;
     double positionFactorY = 0.68;
-
 
 public:
     static SDL_Renderer* gRenderer;
@@ -52,10 +53,10 @@ public:
     bool init();
     bool loadMedia();
     void close();
-    SDL_Texture* loadTexture( std::string path );
+    static SDL_Texture* loadTexture( std::string path );
     bool StartScreen();
     void run();
-
+    
     enum GameState{
         MENU,
         GAME,

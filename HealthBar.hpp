@@ -1,8 +1,8 @@
-#ifndef HealthBar_HPP
-#define HealthBar_HPP
+#ifndef HEALTHBAR_HPP
+#define HEALTHBAR_HPP
 
 #include<SDL.h>
-#include "game.hpp"
+
 
 class HealthBar
 {
@@ -14,10 +14,11 @@ private:
     int max_health;
 
 public:
+    HealthBar();
     HealthBar(SDL_Renderer* renderer, int new_x, int new_y, int curr_health, int new_max_health);
     ~HealthBar();
     void render();
     void reduce_health(int damage);
     void set_x(int value);
 };
-#endif
+#endif 

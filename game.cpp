@@ -3,7 +3,6 @@
 #include "HealthBar.hpp"
 #include "Breakthrough.hpp"
 #include <string>
-// #include 
 
 Game::Game(){};
 Game::~Game(){};
@@ -91,6 +90,10 @@ bool Game::init()
         printf("Failed to initialize MouseClick!\n");
         return false;
     }
+
+// Define tower properties (modify these according to your game logic)
+
+
 	return success;
 }
 
@@ -475,7 +478,6 @@ bool Game::StartScreen(){
 void Game::run( )
 {
 	GameState currentState = GAME;
-
 	bool quit = false;
 	SDL_Event e;
 
@@ -493,9 +495,9 @@ void Game::run( )
 	// char* fontpath = "FreeSans.ttf";
 	// TTF_Init();
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
-
-	HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
-
+	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
+	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
+	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {
 		printf("Failed to initialize Menu!\n");
@@ -536,55 +538,10 @@ void Game::run( )
 					// std::cout << "Level: " << level << std::endl;
 				}
 			}
-				// else if (e.button.button == SDL_BUTTON_RIGHT){
-				// 	int xMouse, yMouse;
-				// 	SDL_GetMouseState(&xMouse,&yMouse);
-				// 	createFighter(xMouse, yMouse);
-				// 	level -= 1;
-				// 	// std::cout << "Level: " << level << std::endl;
-				// }
-			
-			// else if (e.type == SDL_KEYDOWN)
-			// {
-			// 	switch(e.key.keysym.sym){
-			// 	case (SDLK_UP):
-			// 	std::cout << "UP pressed" << std::endl;
-			// 	// assets = loadTexture("Assets/Samurai/Walk.png");
-			// 	// Walking(gRenderer, assets);
-			// 	// Jump(gRenderer, assets);
-			// 	currentState = ATTACKING;
-			// 	break;
-
-			// 	case (SDLK_DOWN):
-			// 	// dropDown(gRenderer, assets);
-			// 	std::cout << "Down pressed" << std::endl;
-			// 	currentState = WALKING;
-			// 	// assets = loadTexture("Assets/Samurai/Attack_3.png");
-			// 	// Attacking3(gRenderer, assets);
-			// 	break;
-
-			// 	case (SDLK_RIGHT):
-			// 	moveRight(gRenderer, assets);
-			// 	std::cout << "Right pressed" << std::endl;
-			// 	break;
-
-			// 	case (SDLK_LEFT):
-			// 	moveLeft(gRenderer, assets);
-			// 	std::cout << "Left pressed" << std::endl;
-			// 	break;
-
-			// 	case (SDLK_SPACE):
-			// 	Jump(gRenderer, assets);
-			// 	std::cout << "Space pressed" << std::endl;
-			// 	break;
-			// 	}
-			// }
-			
 		}
-
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
-		
+		tower.render();
 		if (current_time - bullet_time >= 2000)
 		{
 			breakthrough.createObject(800, 400, "bullet");
@@ -592,27 +549,6 @@ void Game::run( )
 		}
 		breakthrough.drawObjects();
 		breakthrough.detect_collision();
-
-		//***********************draw the objects here********************
-
-		// switch (currentState){
-		// 	case WALKING:
-		// 		assets = loadTexture("Assets/Samurai/Walk.png");
-		// 		Walking(gRenderer, assets);
-		// 		assets = loadTexture("Assets/Fighter/Walk.png");
-		// 		WalkingFighter(gRenderer, assets);
-		// 		break;
-		// 	case ATTACKING:
-		// 		assets = loadTexture("Assets/Samurai/Attack_3.png");
-		// 		Attacking3(gRenderer, assets);
-		// 		healthbar.reduce_health();
-		// 		assets = loadTexture("Assets/Fighter/Attack_2.png");
-		// 		FighterAttacking2(gRenderer, assets);
-		// 		break;
-		// }
-		// Walking(gRenderer, assets);
-
-		//****************************************************************
 		if (currentState == MENU){
 			menu.renderMenuScreen(gRenderer, e);
 			mouseClick.render(gRenderer);
@@ -621,10 +557,10 @@ void Game::run( )
 			continue;
 		}
 
-
+		
 		menu.render(gRenderer);
 		mouseClick.render(gRenderer);
-		healthbar.render();
+		// healthbar.render();
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 

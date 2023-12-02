@@ -27,7 +27,7 @@ void Ninja::move(){
     get_src().h = 128;
     // get_mover().w = 128;
     // get_mover().h = 128;
-    if (get_mover().x < 850)
+    if (get_mover().x < 800)
     {
     if (WanimationDelay == 4){
 
@@ -68,39 +68,12 @@ void Ninja::attack()
 	}
     // get_mover().x += 10;
 	WanimationDelay++;// if (attack_frame == 0)
-    // {
-    //     get_src().x = 151;      
-    //     get_src().y = 53;
-    //     get_src().w = 100;
-    //     get_src().h = 75;
-    // }
-    // else if (attack_frame == 1)
-    // {
-    //     get_src().x = 280;      
-    //     get_src().y = 53;
-    //     get_src().w = 101;
-    //     get_src().h = 75;
-    // }
-    // else if (attack_frame == 2)
-    // {
-    //     get_src().x = 23;      
-    //     get_src().y = 53;
-    //     get_src().w = 79;
-    //     get_src().h = 75;
-    //     attack_frame = 0;
-    // }
-    // attack_frame++;
-    // SDL_Delay(500);
+
 }
 
     // src coorinates from assets.png file, they have been found using spritecow.com
 Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m), srcRect{s}, moverRect{m}, hb(Game::gRenderer, moverRect.x + 40, moverRect.y - 5, current_health, max_health){
-    // srcRect = s;
-    // moverRect = m;
-    // srcRect = {7,88,160,103};
 
-    // it will display pigeon on x = 30, y = 40 location, the size of pigeon is 50 width, 60 height
-    // moverRect = {30, 40, 50, 50};
 }
 
 HealthBar& Ninja::get_hb()
