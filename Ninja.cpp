@@ -103,3 +103,8 @@ Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m), srcRect{s}, moverRect{m}, hb(
     // moverRect = {30, 40, 50, 50};
 }
 
+HealthBar& Ninja::get_hb()
+{
+    return hb;
+}
+

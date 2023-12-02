@@ -23,7 +23,8 @@ public:
     void draw(Unit* ptr);
     void move();
     void attack();
-    Ninja(SDL_Rect s, SDL_Rect m); 
+    Ninja(SDL_Rect s, SDL_Rect m);
+    HealthBar& get_hb();
     // may add other overloaded constructors here... 
 };
 #endif

@@ -19,7 +19,7 @@ void Bullet::draw(Unit* ptr)
 
 void Bullet::move()
 {
-    get_mover().x -= 5;
+    get_mover().x -= movement_speed;
 }
 
 void Bullet::attack()
@@ -35,4 +35,9 @@ Bullet::Bullet(SDL_Rect s, SDL_Rect m, SDL_Texture* texture) : Unit(s, m){
 
     // it will display pigeon on x = 30, y = 40 location, the size of pigeon is 50 width, 60 height
     // moverRect = {30, 40, 50, 50};
+}
+
+int Bullet::get_damage()
+{
+    return damage;
 }

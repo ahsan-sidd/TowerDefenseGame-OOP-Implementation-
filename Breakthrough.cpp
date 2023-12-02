@@ -2,6 +2,8 @@
 #include "Breakthrough.hpp"
 #include "ObjectCreator.hpp"
 #include <string>
+#include "Ninja.hpp"
+#include "Bullet.hpp"
 void Breakthrough::drawObjects()
 {
     // call draw functions of all the objects here
@@ -36,9 +38,18 @@ void Breakthrough::detect_collision()
         {
             auto firstCharacter = characters_list.begin();
             
-            // check for collision and remove bullet from screen and list if collision detected
+            // check for collision, decrease health of character and remove bullet from screen and list if collision detected
             if ((*bulletIter)->get_mover().x < (*firstCharacter)->get_mover().x + 80)
             {
+                Ninja* ninjaCharacter = dynamic_cast<Ninja*>(*firstCharacter);
+                Bullet* bullet = dynamic_cast<Bullet*>(*bulletIter);
+                int damage = bullet->get_damage();
+
+                if (ninjaCharacter != nullptr)
+                {
+                    ninjaCharacter->get_hb().reduce_health(damage);
+                }
+
                 delete *bulletIter;
                 *bulletIter = nullptr;
                 bulletIter = bullets_list.erase(bulletIter);

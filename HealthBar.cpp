@@ -9,9 +9,9 @@ HealthBar::~HealthBar()
 {
 
 }
-void HealthBar::reduce_health()
+void HealthBar::reduce_health(int damage)
 {
-    current_health -= 10;
+    current_health -= damage;
     if (current_health < 0)
     {
         current_health = 0;
