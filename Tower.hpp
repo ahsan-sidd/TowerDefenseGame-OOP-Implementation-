@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <string>
 #include"HealthBar.hpp"
+#include"Cannon.hpp"
 
 class Tower {
 public:
@@ -18,6 +19,7 @@ private:
     SDL_Texture* towerTexture;
     SDL_Rect towerRect;
     HealthBar healthbar;
+    Cannon cannon1;
 };
 
 #endif // TOWER_HPP
