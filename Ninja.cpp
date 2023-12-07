@@ -76,7 +76,12 @@ Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m), srcRect{s}, moverRect{m}, hb(
 
 }
 
-HealthBar& Ninja::get_hb()
+// bool Ninja::hasHealthBar()
+// {
+//     return true;
+// }
+
+HealthBar& Ninja::get_health()
 {
     return hb;
 }

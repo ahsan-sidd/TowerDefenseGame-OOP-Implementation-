@@ -3,6 +3,7 @@
 #include "HealthBar.hpp"
 #include "Breakthrough.hpp"
 #include <string>
+#include "HealSpell.hpp"
 
 Game::Game(){};
 Game::~Game(){};
@@ -484,6 +485,7 @@ void Game::run( )
 	int level = 2;
 
 	Breakthrough breakthrough;
+	HealSpell healspell(10, 2);
 
 	Uint32 current_time;
 	Uint32 bullet_time = SDL_GetTicks();
@@ -536,6 +538,14 @@ void Game::run( )
 					breakthrough.createObject(xMouse, yMouse, "character");
 					// level += 1;
 					// std::cout << "Level: " << level << std::endl;
+				}
+			}
+
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_1)
+				{
+					healspell.effect(breakthrough.characters_list);
 				}
 			}
 		}

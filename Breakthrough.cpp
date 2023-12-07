@@ -41,13 +41,17 @@ void Breakthrough::detect_collision()
             // check for collision, decrease health of character and remove bullet from screen and list if collision detected
             if ((*bulletIter)->get_mover().x < (*firstCharacter)->get_mover().x + 80)
             {
-                Ninja* ninjaCharacter = dynamic_cast<Ninja*>(*firstCharacter);
                 Bullet* bullet = dynamic_cast<Bullet*>(*bulletIter);
                 int damage = bullet->get_damage();
 
-                if (ninjaCharacter != nullptr)
+                (*firstCharacter)->get_health().reduce_health(damage);
+
+                // Check if health of character is <= 0. If so, remove character from screen and list
+                if ((*firstCharacter)->get_health().get_current_health() <= 0)
                 {
-                    ninjaCharacter->get_hb().reduce_health(damage);
+                    delete *firstCharacter;
+                    *firstCharacter = nullptr;
+                    firstCharacter = characters_list.erase(firstCharacter);
                 }
 
                 delete *bulletIter;

@@ -23,8 +23,9 @@ public:
     void draw(Unit* ptr);
     void move();
     void attack();
+    bool hasHealthBar();
     Ninja(SDL_Rect s, SDL_Rect m);
-    HealthBar& get_hb();
+    HealthBar& get_health();
     // may add other overloaded constructors here... 
 };
 #endif
