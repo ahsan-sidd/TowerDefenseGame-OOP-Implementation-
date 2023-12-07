@@ -1,5 +1,6 @@
 #include "HealthBar.hpp"
 #include <SDL.h>
+#include <iostream>
 
 HealthBar::HealthBar(SDL_Renderer* new_renderer, int new_x, int new_y, int curr_health, int new_max_health)
 : renderer{new_renderer}, x{new_x}, y(new_y), max_health{new_max_health}, current_health{curr_health}
@@ -34,4 +35,15 @@ void HealthBar::render()
 void HealthBar::set_x(int value)
 {
     x += value;
+}
+
+int HealthBar::get_current_health()
+{
+    return current_health;
+}
+
+void HealthBar::set_current_health(int amount)
+{
+    current_health += amount;
+    std::cout << "health: " << current_health;
 }
