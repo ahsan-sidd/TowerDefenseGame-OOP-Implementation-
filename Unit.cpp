@@ -23,10 +23,7 @@ SDL_Rect& Unit::get_mover()
     return moverRect;
 }
 
-// bool Unit::checkCollision(const Unit* other) const
+// bool Unit::hasHealthBar()
 // {
-//     SDL_Rect thisRect = moverRect;
-//     SDL_Rect otherRect = other->moverRect;
-
-//     return SDL_HasIntersection(&thisRect, &otherRect) == SDL_TRUE;
+//     return false;
 // }

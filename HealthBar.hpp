@@ -18,6 +18,8 @@ public:
     ~HealthBar();
     void render();
     void reduce_health(int damage);
+    int get_current_health();
     void set_x(int value);
+    void set_current_health(int amount);
 };
 #endif

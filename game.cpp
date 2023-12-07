@@ -3,7 +3,7 @@
 #include "HealthBar.hpp"
 #include "Breakthrough.hpp"
 #include <string>
-// #include 
+#include "HealSpell.hpp"
 
 Game::Game(){};
 Game::~Game(){};
@@ -495,6 +495,7 @@ void Game::run( )
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
 
 	HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
+	HealSpell healspell(10, 2);
 
 	Menu menu;
 	if (!menu.init(gRenderer)) {
@@ -579,6 +580,13 @@ void Game::run( )
 			// 	break;
 			// 	}
 			// }
+			if (e.type == SDL_KEYDOWN)
+			{
+				if (e.key.keysym.sym == SDLK_1)
+				{
+					healspell.effect(breakthrough.characters_list);
+				}
+			}
 			
 		}
 

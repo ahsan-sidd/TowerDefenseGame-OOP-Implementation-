@@ -1,7 +1,7 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 #include <SDL.h>
-
+#include "HealthBar.hpp"
 class Unit
 {
 private:
@@ -13,7 +13,10 @@ public:
     virtual void draw(Unit* ptr) = 0;
     virtual void move() = 0;
     virtual void attack() = 0;
-    // bool checkCollision(const Unit* other) const;
+
+    // virtual bool hasHealthBar();
+    virtual HealthBar& get_health() {};
+
     SDL_Rect& get_src();
     SDL_Rect& get_mover();
 };
