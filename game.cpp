@@ -543,9 +543,10 @@ void Game::run( )
 
 			if (e.type == SDL_KEYDOWN)
 			{
-				if (e.key.keysym.sym == SDLK_1)
+				if (e.key.keysym.sym == SDLK_1 && healspell.get_num_uses() > 0)
 				{
 					healspell.effect(breakthrough.characters_list);
+					healspell.reduce_uses();
 				}
 			}
 		}
