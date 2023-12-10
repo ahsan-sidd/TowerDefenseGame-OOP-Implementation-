@@ -15,6 +15,18 @@
 // #include "cmath"
 // #include "CustomCursor.cpp"
 
+enum GameState{
+        MENU,
+        GAME,
+        QUIT
+    };
+
+enum Character{
+        SAMURAI,
+        SHINOBI,
+        FIGHTER
+    };
+
 class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = (1244); 
@@ -60,11 +72,8 @@ public:
     // void fadeOut();
     void drawCharacterSelectScreen(SDL_Texture* samuraiSelect, SDL_Texture* shinobiSelect, SDL_Texture* fighterSelect, SDL_Rect samuraiSrc, SDL_Rect shinobiSrc, SDL_Rect fighterSrc, SDL_Rect samuraiDest, SDL_Rect shinobiDest, SDL_Rect fighterDest, int CharNum);
     void run();
+    static Character character;
     
-    enum GameState{
-        MENU,
-        GAME,
-        QUIT
-    };
+    
 };
 

@@ -20,6 +20,7 @@ class Ninja : public Unit{
 
 public:
     // add the fly function here as well.
+    ~Ninja();
     void draw(Unit* ptr);
     void move();
     void attack();
@@ -28,8 +29,12 @@ public:
     HealthBar& get_health();
 
     bool isAttacking = false;
-    SDL_Texture* walkTexture = Game::loadTexture("Assets/Samurai/Walk.png");
-    SDL_Texture* attackTexture = Game::loadTexture("Assets/Samurai/Attack_1.png");
+    SDL_Texture* SamuraiWalkTexture = Game::loadTexture("Assets/Samurai/Walk.png");
+    SDL_Texture* SamuraiAttackTexture = Game::loadTexture("Assets/Samurai/Attack_2.png");
+    SDL_Texture* FighterWalkTexture = Game::loadTexture("Assets/Fighter/Walk.png");
+    SDL_Texture* FighterAttackTexture = Game::loadTexture("Assets/Fighter/Attack_3.png");
+    SDL_Texture* ShinobiWalkTexture = Game::loadTexture("Assets/Shinobi/Walk.png");
+    SDL_Texture* ShinobiAttackTexture = Game::loadTexture("Assets/Shinobi/Attack_3.png");
     // may add other overloaded constructors here... 
 };
 #endif

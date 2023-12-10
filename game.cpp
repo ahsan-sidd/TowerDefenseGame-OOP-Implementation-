@@ -5,6 +5,7 @@
 #include <string>
 #include "HealSpell.hpp"
 
+Character Game::character = SAMURAI;
 Game::Game(){};
 Game::~Game(){};
 SDL_Texture* Game::assets = nullptr;
@@ -626,18 +627,21 @@ bool Game::characterSelect(){
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 				if (xMouse >= 160 && xMouse <= 320 && yMouse >= 330 && yMouse <= 490) {
+					Game::character = SAMURAI;
 					renderAttackAnimation(samuraiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 1);
 					// fadeOut();
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 480 && xMouse <= 640 && yMouse >= 330 && yMouse <= 490) {
+					Game::character = SHINOBI;
 					renderAttackAnimation(shinobiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 2);
 					// fadeOut();
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 800 && xMouse <= 960 && yMouse >= 330 && yMouse <= 490) {
+					Game::character = FIGHTER;
 					renderAttackAnimation(fighterAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 3);
 					// fadeOut();
 					quit = false;
@@ -778,7 +782,16 @@ void Game::run( )
 	Uint32 current_time;
 	Uint32 bullet_time = SDL_GetTicks();
 
-	assets = loadTexture("Assets/Samurai/Walk.png");
+	// if (character == SAMURAI){
+	// 	assets = loadTexture("Assets/Samurai/Walk.png");
+	// }
+	// else if (character == SHINOBI){
+	// 	assets = loadTexture("Assets/Shinobi/Walk.png");
+	// }
+	// else if (character == FIGHTER){
+	// 	assets = loadTexture("Assets/Fighter/Walk.png");
+	// }
+	// assets = loadTexture("Assets/Samurai/Walk.png");
 
 	// CharacterState currentState = WALKING;
 
