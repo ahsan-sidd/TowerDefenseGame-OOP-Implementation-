@@ -17,6 +17,11 @@ int main(int argc, char *argv[]){
         game.close();
         return 0;
     }
+    if (game.characterSelect() == false){
+        game.close();
+        return 0;
+    }
+    // game.characterSelect();
     game.run();
     game.close();
 

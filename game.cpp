@@ -92,9 +92,13 @@ bool Game::init()
         return false;
     }
 
+	if (TTF_Init() == -1) {
+		printf("SDL_ttf could not initialize! TTF_Error: %s\n", TTF_GetError());
+		return false;
+	}
+
+
 // Define tower properties (modify these according to your game logic)
-
-
 	return success;
 }
 
@@ -475,6 +479,205 @@ bool Game::StartScreen(){
 	SDL_DestroyTexture(ocean);
 	return true;
 }
+
+bool Game::characterSelect(){
+
+	// Define the source rectangles for the idle frames
+    SDL_Rect samuraiSrc = {0, 0, 128, 128}; // Adjust these values as needed
+    SDL_Rect shinobiSrc = {0, 0, 128, 128};
+    SDL_Rect fighterSrc = {0, 0, 128, 128};
+
+	// Define the destination rectangles for the characters
+    SDL_Rect samuraiDest = {160, 330, 160, 160}; // Adjust these values as needed
+    SDL_Rect shinobiDest = {480, 330, 160, 160};
+    SDL_Rect fighterDest = {800, 330, 160, 160};
+
+	// assets = loadTexture("Assets/Backgrounds/5.png");
+	SDL_Texture* samuraiSelect = loadTexture("Assets/Samurai/Idle.png");
+	SDL_Texture* shinobiSelect = loadTexture("Assets/Shinobi/Idle.png");
+	SDL_Texture* fighterSelect = loadTexture("Assets/Fighter/Idle.png");
+	// SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_Texture* characterSelect = loadTexture("Assets/Backgrounds/CharSelect.png");
+	// Define the frame index and frame delay counter
+    int frameIndex = 0;
+    int frameDelay = 0;
+
+	// Load the dialogue box texture
+	SDL_Texture* dialogueBox = loadTexture("Assets/Backgrounds/DialogueBox.png");
+
+	TTF_Font* font = TTF_OpenFont("Assets/Font.ttf", 24);
+	if (font == NULL) {
+		printf("Failed to load font: %s\n", TTF_GetError());
+		return false;
+	}
+
+	std::string textSamurai = "Samurai";
+	std::string textShinobi = "Shinobi";
+	std::string textFighter = "Fighter";
+
+	std::vector<SDL_Texture*> texturesSamurai;
+	std::vector<SDL_Texture*> texturesShinobi;
+	std::vector<SDL_Texture*> texturesFighter;
+
+	for (char c : textSamurai) {
+		std::string s(1, c);
+		SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), {255, 255, 255});
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+		texturesSamurai.push_back(texture);
+		SDL_FreeSurface(surface);
+	}
+
+	for (char c : textShinobi) {
+		std::string s(1, c);
+		SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), {255, 255, 255});
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+		texturesShinobi.push_back(texture);
+		SDL_FreeSurface(surface);
+	}
+
+	for (char c : textFighter) {
+		std::string s(1, c);
+		SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), {255, 255, 255});
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+		texturesFighter.push_back(texture);
+		SDL_FreeSurface(surface);
+	}
+
+	int textDelay = 0;
+	int numChars = 0;
+
+	bool quit = true;
+	while (quit){
+		SDL_RenderCopy(gRenderer, characterSelect, NULL, NULL);
+
+		int xMouse, yMouse;
+		SDL_GetMouseState(&xMouse, &yMouse);
+
+		// Show the dialogue box and type out the text when the mouse is over a character
+		if (xMouse >= samuraiDest.x && xMouse <= samuraiDest.x + 160 && yMouse >= samuraiDest.y && yMouse <= samuraiDest.y + 160) {
+			if (textDelay >= 3) {
+				textDelay = 0;
+				if (numChars < texturesSamurai.size()) {
+					numChars++;
+				}
+			}
+			textDelay++;
+
+			for (int i = 0; i < numChars; i++) {
+				SDL_Rect dest = {180 + i * 20, 500, 20, 25}; // Adjust these values as needed
+				SDL_RenderCopy(gRenderer, texturesSamurai[i], NULL, &dest);
+			}	
+
+		}
+		else if (xMouse >= shinobiDest.x && xMouse <= shinobiDest.x + 160 && yMouse >= shinobiDest.y && yMouse <= shinobiDest.y + 160) {
+			// ...
+			if (textDelay >= 3) {
+				textDelay = 0;
+				if (numChars < texturesShinobi.size()) {
+					numChars++;
+				}
+			}
+			textDelay++;
+
+			for (int i = 0; i < numChars; i++) {
+				SDL_Rect dest = {500 + i * 20, 500, 20, 25}; // Adjust these values as needed
+				SDL_RenderCopy(gRenderer, texturesShinobi[i], NULL, &dest);
+			}   
+		} else if (xMouse >= fighterDest.x && xMouse <= fighterDest.x + 160 && yMouse >= fighterDest.y && yMouse <= fighterDest.y + 160) {
+			// ...
+			if (textDelay >= 3) {
+				textDelay = 0;
+				if (numChars < texturesFighter.size()) {
+					numChars++;
+				}
+			}
+			textDelay++;
+
+			for (int i = 0; i < numChars; i++) {
+				SDL_Rect dest = {820 + i * 20, 500, 20, 25}; // Adjust these values as needed
+				SDL_RenderCopy(gRenderer, texturesFighter[i], NULL, &dest);
+			}   
+		}
+		else{
+			textDelay = 0;
+			numChars = 0;
+		}
+
+			
+
+		SDL_Event e;
+		while (SDL_PollEvent(&e) != 0) {
+			mouseClick.handleEvent(e);
+			if (e.type == SDL_QUIT) {
+				quit = false;
+				return false;
+			}
+			if (e.type == SDL_MOUSEBUTTONDOWN) {
+				int xMouse, yMouse;
+				SDL_GetMouseState(&xMouse, &yMouse);
+				if (xMouse >= 160 && xMouse <= 320 && yMouse >= 330 && yMouse <= 490) {
+					quit = false;
+					// return;
+				}
+				else if (xMouse >= 480 && xMouse <= 640 && yMouse >= 330 && yMouse <= 490) {
+					quit = false;
+					// return;
+				}
+				else if (xMouse >= 800 && xMouse <= 960 && yMouse >= 330 && yMouse <= 490) {
+					quit = false;
+					// return;
+				}
+			}
+
+		}
+
+		frameDelay++;
+		// If the frame delay counter reaches 6, reset it and increment the frame index
+        if (frameDelay >= 6) {
+            frameDelay = 0;
+            frameIndex++;
+
+            // If the frame index reaches 6, reset it to 0
+            if (frameIndex >= 6) {
+                frameIndex = 0;
+            }
+        }	
+
+		samuraiSrc.x = shinobiSrc.x = fighterSrc.x = frameIndex * 128;
+
+
+        SDL_RenderCopy(gRenderer, samuraiSelect, &samuraiSrc, &samuraiDest);
+        SDL_RenderCopy(gRenderer, shinobiSelect, &shinobiSrc, &shinobiDest);
+        SDL_RenderCopy(gRenderer, fighterSelect, &fighterSrc, &fighterDest);
+
+		// SDL_RenderCopy(gRenderer, samuraiText, &samuraiTextSrc, &samuraiTextDest);
+		
+
+		mouseClick.render(gRenderer);
+		SDL_RenderPresent(gRenderer);
+		SDL_Delay(10);
+	}
+	SDL_DestroyTexture(samuraiSelect);
+	SDL_DestroyTexture(shinobiSelect);
+	SDL_DestroyTexture(fighterSelect);
+	SDL_DestroyTexture(characterSelect);
+	SDL_DestroyTexture(dialogueBox);
+	// SDL_DestroyTexture(samuraiText);
+	// SDL_FreeSurface(samuraiSurface);
+	for (SDL_Texture* texture : texturesSamurai) {
+    	SDL_DestroyTexture(texture);
+	}
+	for (SDL_Texture* texture : texturesShinobi) {
+		SDL_DestroyTexture(texture);
+	}
+	for (SDL_Texture* texture : texturesFighter) {
+		SDL_DestroyTexture(texture);
+	}
+	TTF_CloseFont(font);
+	return true;
+
+}
+
 
 void Game::run( )
 {

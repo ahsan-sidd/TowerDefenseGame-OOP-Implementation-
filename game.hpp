@@ -55,6 +55,7 @@ public:
     void close();
     static SDL_Texture* loadTexture( std::string path );
     bool StartScreen();
+    bool characterSelect();
     void run();
     
     enum GameState{
