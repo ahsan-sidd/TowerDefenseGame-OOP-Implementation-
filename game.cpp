@@ -496,8 +496,14 @@ bool Game::characterSelect(){
 	SDL_Texture* samuraiSelect = loadTexture("Assets/Samurai/Idle.png");
 	SDL_Texture* shinobiSelect = loadTexture("Assets/Shinobi/Idle.png");
 	SDL_Texture* fighterSelect = loadTexture("Assets/Fighter/Idle.png");
+
+	SDL_Texture* fighterAttack = loadTexture("Assets/Fighter/Attack_3.png");
+	SDL_Texture* samuraiAttack = loadTexture("Assets/Samurai/Attack_2.png");
+	SDL_Texture* shinobiAttack = loadTexture("Assets/Shinobi/Attack_3.png");
 	// SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 	SDL_Texture* characterSelect = loadTexture("Assets/Backgrounds/CharSelect.png");
+	SDL_Texture* charTop = loadTexture("Assets/Backgrounds/CharTop.png");
+	SDL_Rect charTopDest = {0, 0, 1244, 282};
 	// Define the frame index and frame delay counter
     int frameIndex = 0;
     int frameDelay = 0;
@@ -549,6 +555,10 @@ bool Game::characterSelect(){
 	bool quit = true;
 	while (quit){
 		SDL_RenderCopy(gRenderer, characterSelect, NULL, NULL);
+		SDL_RenderCopy(gRenderer, samuraiSelect, &samuraiSrc, &samuraiDest);
+        SDL_RenderCopy(gRenderer, shinobiSelect, &shinobiSrc, &shinobiDest);
+        SDL_RenderCopy(gRenderer, fighterSelect, &fighterSrc, &fighterDest);
+		SDL_RenderCopy(gRenderer, charTop, NULL, &charTopDest);
 
 		int xMouse, yMouse;
 		SDL_GetMouseState(&xMouse, &yMouse);
@@ -616,14 +626,20 @@ bool Game::characterSelect(){
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 				if (xMouse >= 160 && xMouse <= 320 && yMouse >= 330 && yMouse <= 490) {
+					renderAttackAnimation(samuraiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 1);
+					// fadeOut();
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 480 && xMouse <= 640 && yMouse >= 330 && yMouse <= 490) {
+					renderAttackAnimation(shinobiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 2);
+					// fadeOut();
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 800 && xMouse <= 960 && yMouse >= 330 && yMouse <= 490) {
+					renderAttackAnimation(fighterAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 3);
+					// fadeOut();
 					quit = false;
 					// return;
 				}
@@ -646,9 +662,7 @@ bool Game::characterSelect(){
 		samuraiSrc.x = shinobiSrc.x = fighterSrc.x = frameIndex * 128;
 
 
-        SDL_RenderCopy(gRenderer, samuraiSelect, &samuraiSrc, &samuraiDest);
-        SDL_RenderCopy(gRenderer, shinobiSelect, &shinobiSrc, &shinobiDest);
-        SDL_RenderCopy(gRenderer, fighterSelect, &fighterSrc, &fighterDest);
+
 
 		// SDL_RenderCopy(gRenderer, samuraiText, &samuraiTextSrc, &samuraiTextDest);
 		
@@ -662,6 +676,10 @@ bool Game::characterSelect(){
 	SDL_DestroyTexture(fighterSelect);
 	SDL_DestroyTexture(characterSelect);
 	SDL_DestroyTexture(dialogueBox);
+
+	SDL_DestroyTexture(fighterAttack);
+	SDL_DestroyTexture(samuraiAttack);
+	SDL_DestroyTexture(shinobiAttack);
 	// SDL_DestroyTexture(samuraiText);
 	// SDL_FreeSurface(samuraiSurface);
 	for (SDL_Texture* texture : texturesSamurai) {
@@ -678,6 +696,73 @@ bool Game::characterSelect(){
 
 }
 
+void Game::drawCharacterSelectScreen(SDL_Texture* samuraiSelect, SDL_Texture* shinobiSelect, SDL_Texture* fighterSelect, SDL_Rect samuraiSrc, SDL_Rect shinobiSrc, SDL_Rect fighterSrc, SDL_Rect samuraiDest, SDL_Rect shinobiDest, SDL_Rect fighterDest, int CharNum) {
+	if (CharNum != 1){SDL_RenderCopy(gRenderer, samuraiSelect, &samuraiSrc, &samuraiDest);}
+	if (CharNum != 2){SDL_RenderCopy(gRenderer, shinobiSelect, &shinobiSrc, &shinobiDest);}
+	if (CharNum != 3){SDL_RenderCopy(gRenderer, fighterSelect, &fighterSrc, &fighterDest);}
+}
+
+void Game::renderAttackAnimation(SDL_Texture* attackTexture, SDL_Texture* samuraiSelect, SDL_Texture* shinobiSelect, SDL_Texture* fighterSelect, SDL_Rect samuraiSrc, SDL_Rect shinobiSrc, SDL_Rect fighterSrc, SDL_Rect samuraiDest, SDL_Rect shinobiDest, SDL_Rect fighterDest, int CharNum) {
+	SDL_Rect src = {0, 0, 128, 128}; // Source rectangle for the frames
+	SDL_Rect dest = {0,0,0,0};
+	if (CharNum == 1){
+		dest = {160, 330, 160, 160}; // Destination rectangle for the frames
+	}
+	else if (CharNum == 2){
+		dest = {480, 330, 160, 160}; // Destination rectangle for the frames
+	}
+	else if (CharNum == 3){
+		dest = {800, 330, 160, 160}; // Destination rectangle for the frames
+	}
+	// SDL_Rect dest = {160, 330, 160, 160}; // Destination rectangle for the frames
+
+	// Set the renderer color to black (RGBA: 0, 0, 0, 255)
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+
+
+	// Loop through the frames
+	for (int i = 0; i < 4; i++) {
+
+		// // Draw a black rectangle at the destination
+		SDL_RenderFillRect(gRenderer, &dest);
+
+		src.x = i * 128; // Update the x position of the source rectangle
+
+		// Redraw the character select screen
+		drawCharacterSelectScreen(samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, CharNum);
+
+		// Render the current frame
+		SDL_RenderCopy(gRenderer, attackTexture, &src, &dest);
+
+		// Update the screen
+		SDL_RenderPresent(gRenderer);
+
+		// Wait for a short delay
+		SDL_Delay(120);
+	}
+}
+
+// void Game::fadeOut() {
+// 	SDL_Rect screenRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}; // Rectangle covering the entire screen
+
+// 	// Loop from 0 to 255, stepping by fadeSpeed
+// 	int j = 255;
+// 	for (int i = 0; i <= 255; i += 5) {
+// 		// Set the renderer color to black with the current alpha value
+// 		SDL_SetRenderDrawColor(gRenderer, i, i, i, j);
+
+// 		// Draw a rectangle over the entire screen
+// 		SDL_RenderFillRect(gRenderer, &screenRect);
+
+// 		// Update the screen
+// 		SDL_RenderPresent(gRenderer);
+
+// 		j -= 5;
+// 		// Wait for a short delay
+// 		SDL_Delay(15);
+// 	}
+// 	return;
+// }
 
 void Game::run( )
 {

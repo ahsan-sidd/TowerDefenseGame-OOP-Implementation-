@@ -4,8 +4,8 @@ Menu::Menu() {
     // Initialize the MenuButtonRect to the desired position and size
     MenuButtonRect.x = 50; // Set this to the desired x position
     MenuButtonRect.y = 50; // Set this to the desired y position
-    MenuButtonRect.w = 100; // Set this to the width of the button
-    MenuButtonRect.h = 100; // Set this to the height of the button
+    MenuButtonRect.w = 90; // Set this to the width of the button
+    MenuButtonRect.h = 90; // Set this to the height of the button
 }
 
 Menu::~Menu() {

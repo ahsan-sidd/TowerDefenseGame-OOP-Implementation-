@@ -56,6 +56,9 @@ public:
     static SDL_Texture* loadTexture( std::string path );
     bool StartScreen();
     bool characterSelect();
+    void renderAttackAnimation(SDL_Texture* attackTexture, SDL_Texture* samuraiSelect, SDL_Texture* shinobiSelect, SDL_Texture* fighterSelect, SDL_Rect samuraiSrc, SDL_Rect shinobiSrc, SDL_Rect fighterSrc, SDL_Rect samuraiDest, SDL_Rect shinobiDest, SDL_Rect fighterDest, int CharNum);
+    // void fadeOut();
+    void drawCharacterSelectScreen(SDL_Texture* samuraiSelect, SDL_Texture* shinobiSelect, SDL_Texture* fighterSelect, SDL_Rect samuraiSrc, SDL_Rect shinobiSrc, SDL_Rect fighterSrc, SDL_Rect samuraiDest, SDL_Rect shinobiDest, SDL_Rect fighterDest, int CharNum);
     void run();
     
     enum GameState{
