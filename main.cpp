@@ -8,10 +8,10 @@ int main(int argc, char *argv[]){
         return 0;
 	}
 		//Load media
-    if( !game.loadMedia() ){
-        printf( "Failed to load media!\n" );
-        return 0;
-    }
+    // if( !game.loadMedia() ){
+    //     printf( "Failed to load media!\n" );
+    //     return 0;
+    // }
     // game.StartScreen();
     if (game.StartScreen() == false){
         game.close();
