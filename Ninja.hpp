@@ -27,6 +27,8 @@ public:
     Ninja(SDL_Rect s, SDL_Rect m);
     HealthBar& get_health();
 
+    bool isAttacking = false;
+    SDL_Texture* walkTexture = Game::loadTexture("Assets/Samurai/Walk.png");
     SDL_Texture* attackTexture = Game::loadTexture("Assets/Samurai/Attack_1.png");
     // may add other overloaded constructors here... 
 };
