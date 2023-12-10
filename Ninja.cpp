@@ -52,7 +52,7 @@ void Ninja::move(){
 
 void Ninja::attack()
 {
-    game.assets = game.loadTexture("Assets/Samurai/Attack_1.png");
+    game.assets = attackTexture;
     if (WanimationDelay == 3){
 
 	frameCount++;
