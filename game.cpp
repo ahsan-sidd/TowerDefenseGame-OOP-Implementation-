@@ -187,7 +187,10 @@ bool Game::StartScreen(){
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255); // Set the color to black
     SDL_RenderClear(gRenderer); // Fill the texture with the black color
     SDL_SetRenderTarget(gRenderer, NULL);
-	Mix_PlayMusic(menuMusic, -1);
+	
+	Mix_Music* logoMusic = Mix_LoadMUS("Assets/epic_logo-2.mp3");
+	Mix_PlayMusic(logoMusic, 1);
+
 
 
 
@@ -269,7 +272,7 @@ bool Game::StartScreen(){
 	int characterFrame = 8;
 	int animationDelay = 0;
 
-
+	
 	while (!quit) {
 
 		if (renderButton){
@@ -285,6 +288,8 @@ bool Game::StartScreen(){
 				}
 				if (e.type == SDL_MOUSEBUTTONDOWN){
 					renderButton = false;
+					Mix_FreeMusic(logoMusic);
+					Mix_PlayMusic(menuMusic, -1);
 				}
 				//on window resizing adjust rects relative to window size
 				else if (e.type == SDL_WINDOWEVENT){
