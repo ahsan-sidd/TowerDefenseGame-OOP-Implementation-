@@ -325,9 +325,7 @@ bool Game::StartScreen(){
             	int xMouse, yMouse;
             	SDL_GetMouseState(&xMouse, &yMouse);
             	if (xMouse >= startButtonRect.x && xMouse <= startButtonRect.x + startButtonRect.w && yMouse >= startButtonRect.y && yMouse <= startButtonRect.y + startButtonRect.h) {
-					Mix_FreeMusic(menuMusic);
-					Mix_CloseAudio();
-					Mix_PlayMusic(gameMusic, -1);
+					
 					quit = true;
             	}
 				else if (xMouse >= samuraiRect.x+30 && xMouse <= samuraiRect.x + samuraiRect.w-30 && yMouse >= samuraiRect.y+30 && yMouse <= samuraiRect.y + samuraiRect.h-30) {
@@ -633,22 +631,34 @@ bool Game::characterSelect(){
 				SDL_GetMouseState(&xMouse, &yMouse);
 				if (xMouse >= 160 && xMouse <= 320 && yMouse >= 330 && yMouse <= 490) {
 					Game::character = SAMURAI;
+					Mix_Chunk* slashSound = Mix_LoadWAV("Assets/slash.wav");
+					Mix_PlayChannel(-1, slashSound, 0);
+					//reduce volume of slash sound
+					Mix_VolumeChunk(slashSound, MIX_MAX_VOLUME / 3);
 					renderAttackAnimation(samuraiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 1);
 					// fadeOut();
+					Mix_FreeChunk(slashSound);
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 480 && xMouse <= 640 && yMouse >= 330 && yMouse <= 490) {
 					Game::character = SHINOBI;
+					Mix_Chunk* daggerSound = Mix_LoadWAV("Assets/dagger.wav");
+					Mix_PlayChannel(-1, daggerSound, 0);
 					renderAttackAnimation(shinobiAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 2);
 					// fadeOut();
+					Mix_FreeChunk(daggerSound);
 					quit = false;
 					// return;
 				}
 				else if (xMouse >= 800 && xMouse <= 960 && yMouse >= 330 && yMouse <= 490) {
 					Game::character = FIGHTER;
+					Mix_Chunk* kickSound = Mix_LoadWAV("Assets/kick.wav");
+					Mix_PlayChannel(-1, kickSound, 0);
+					Mix_VolumeChunk(kickSound, MIX_MAX_VOLUME / 2);
 					renderAttackAnimation(fighterAttack, samuraiSelect, shinobiSelect, fighterSelect, samuraiSrc, shinobiSrc, fighterSrc, samuraiDest, shinobiDest, fighterDest, 3);
 					// fadeOut();
+					Mix_FreeChunk(kickSound);
 					quit = false;
 					// return;
 				}
@@ -680,6 +690,11 @@ bool Game::characterSelect(){
 		SDL_RenderPresent(gRenderer);
 		SDL_Delay(10);
 	}
+
+	Mix_FreeMusic(menuMusic);
+	Mix_CloseAudio();
+	Mix_PlayMusic(gameMusic, -1);
+
 	SDL_DestroyTexture(samuraiSelect);
 	SDL_DestroyTexture(shinobiSelect);
 	SDL_DestroyTexture(fighterSelect);
