@@ -13,7 +13,7 @@ public:
     virtual void draw(Unit* ptr) = 0;
     virtual void move() = 0;
     virtual void attack() = 0;
-
+    virtual int get_damage() = 0;
     // virtual bool hasHealthBar();
     virtual HealthBar& get_health() {};
 

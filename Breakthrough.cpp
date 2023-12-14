@@ -9,7 +9,7 @@ void Breakthrough::drawObjects()
     // call draw functions of all the objects here
     for (Unit* unit : characters_list) {
         unit->draw(unit);
-        unit->move();
+        // unit->move();
     }
 
     for (Unit* unit : bullets_list) {

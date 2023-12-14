@@ -16,6 +16,7 @@ class Ninja : public Unit{
     int frameCount = 0;
     int current_health = 50;
     int max_health = 50;
+    int damage = 10;
     HealthBar hb;
 
 public:
@@ -24,7 +25,7 @@ public:
     void draw(Unit* ptr);
     void move();
     void attack();
-    bool hasHealthBar();
+    int get_damage();
     Ninja(SDL_Rect s, SDL_Rect m);
     HealthBar& get_health();
 

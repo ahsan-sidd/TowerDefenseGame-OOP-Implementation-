@@ -799,6 +799,10 @@ void Game::run( )
 	Breakthrough breakthrough;
 	HealSpell healspell(10, 2);
 
+	breakthrough.createObject(100, 558, "character");
+
+	auto character_iter = breakthrough.characters_list.begin();
+
 	Uint32 current_time;
 	Uint32 bullet_time = SDL_GetTicks();
 
@@ -820,7 +824,6 @@ void Game::run( )
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
 	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
-	
 	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {
@@ -851,17 +854,17 @@ void Game::run( )
             // The escape key was pressed while in the menu state, switch back to the gameplay state
             currentState = GAME;
         	}
-			if(e.type == SDL_MOUSEBUTTONDOWN){
-			//this is a good location to add pigeon in linked list.
-				if (e.button.button == SDL_BUTTON_LEFT)
-				{
-					int xMouse, yMouse;
-					SDL_GetMouseState(&xMouse,&yMouse);
-					breakthrough.createObject(xMouse, yMouse, "character");
-					// level += 1;
-					// std::cout << "Level: " << level << std::endl;
-				}
-			}
+			// if(e.type == SDL_MOUSEBUTTONDOWN){
+			// //this is a good location to add pigeon in linked list.
+			// 	if (e.button.button == SDL_BUTTON_LEFT)
+			// 	{
+			// 		int xMouse, yMouse;
+			// 		SDL_GetMouseState(&xMouse,&yMouse);
+			// 		// breakthrough.createObject(xMouse, yMouse, "character");
+			// 		// level += 1;
+			// 		// std::cout << "Level: " << level << std::endl;
+			// 	}
+			// }
 
 			if (e.type == SDL_KEYDOWN)
 			{
@@ -869,6 +872,12 @@ void Game::run( )
 				{
 					healspell.effect(breakthrough.characters_list);
 					healspell.reduce_uses();
+				}
+
+				else if (e.key.keysym.sym == SDLK_RIGHT)
+				{
+					// Move character if right arrow key is pressed
+					(*character_iter)->move();
 				}
 			}
 		}
