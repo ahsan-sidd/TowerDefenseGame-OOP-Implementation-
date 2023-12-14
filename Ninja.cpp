@@ -2,6 +2,7 @@
 #include "Ninja.hpp"
 #include <iostream>
 #include "HealthBar.hpp"
+#include "Tower.hpp"
 // pigeon implementation will go here.
 
 
@@ -105,6 +106,7 @@ void Ninja::attack()
 	else {
 		AanimationDelay++;
 	}
+	
 }
 
     // src coorinates from assets.png file, they have been found using spritecow.com

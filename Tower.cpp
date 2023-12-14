@@ -9,6 +9,7 @@ Tower::Tower(SDL_Renderer* renderer, const std::string& imagePath, int x, int y,
     healthbar={gRenderer, 1000, 180, 200, 200};
     // Set tower properties
     towerRect = { x, y, width, height };
+    cannon1={gRenderer, "Assets/cannon.png", 1000, 180, 200, 200};
 }
 Tower::~Tower() {
     // Free tower texture when the object is destroyed
@@ -18,6 +19,7 @@ Tower::~Tower() {
 void Tower::render() {
     // Render the tower
     SDL_RenderCopy(gRenderer, towerTexture, NULL, &towerRect);
+    cannon1.render();
     healthbar.render();
 }
 

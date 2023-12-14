@@ -820,6 +820,7 @@ void Game::run( )
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
 	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
+	
 	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {

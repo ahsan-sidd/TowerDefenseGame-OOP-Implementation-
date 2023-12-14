@@ -46,8 +46,8 @@ Unit* ObjectCreator::getObject(int new_x, int new_y, std::string object_to_creat
     }
     else if (object_to_create == "bullet")
     {
-        SDL_Texture* bullet_texture = loadTexture(Game::gRenderer, "Assets/bullet.png");
-        return new Bullet({79, 56, 128, 128}, {1000, 658, 50, 50}, bullet_texture);
+        SDL_Texture* bullet_texture = loadTexture(Game::gRenderer, "Assets/blackball.png");
+        return new Bullet({241, 57, 241, 245}, {1000, 658, 40, 40}, bullet_texture);
         //81, 19
     }
     // else if (random == 1)

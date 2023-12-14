@@ -11,9 +11,7 @@ class Tower {
 public:
     Tower(SDL_Renderer* renderer, const std::string& imagePath, int x, int y, int width, int height);
     ~Tower();
-
     void render();
-
 private:
     SDL_Renderer* gRenderer;
     SDL_Texture* towerTexture;
