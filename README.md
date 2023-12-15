@@ -11,6 +11,11 @@ The objective of the game is to destroy the tower/wall using characters with uni
 
 ## Creators
 * Ahsan Siddiqui
-* Hassan Tariq
+* Hassaan Tariq
 * Zohaib Aslam
 
+Command to run it in VS Code:
+ g++ *.cpp -IC:\mingw_dev_lib\include\SDL2 -LC:\mingw_dev_lib\lib -w -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_Mixer -lSDL2_ttf
+
+Requirements:
+SDL2, mingw32, SDL2_image, SDL2_Mixer and SDL2_ttf
