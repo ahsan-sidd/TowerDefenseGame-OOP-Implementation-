@@ -13,7 +13,7 @@ public:
     void render();
 
 private:
-    SDL_Renderer* gRenderer;
+    // SDL_Renderer* gRenderer;
     SDL_Texture* cannonTexture;
     SDL_Rect cannonRect;
 };

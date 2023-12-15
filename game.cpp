@@ -788,8 +788,12 @@ void Game::renderAttackAnimation(SDL_Texture* attackTexture, SDL_Texture* samura
 // 	return;
 // }
 
+
 void Game::run( )
 {
+	Uint32 startTime = SDL_GetTicks();
+	Uint32 gameDuration = 120; // 2 minutes
+	Uint32 pauseStartTime = 0;
 	GameState currentState = GAME;
 	bool quit = false;
 	SDL_Event e;
@@ -804,6 +808,7 @@ void Game::run( )
 	auto character_iter = breakthrough.characters_list.begin();
 
 	Uint32 current_time;
+	Uint32 currentTime2;
 	Uint32 bullet_time = SDL_GetTicks();
 
 	// if (character == SAMURAI){
@@ -824,14 +829,17 @@ void Game::run( )
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
 	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
+	Cannon cannon1={Game::gRenderer, "Assets/cannon.png", 870, 540, 340*0.7, 278*0.7};
 	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {
 		printf("Failed to initialize Menu!\n");
 	}
+
+	bool isPaused = false;
 	while( !quit )
-	{
-		current_time = SDL_GetTicks();
+	{	
+		
 		if (gTexture != nullptr){
 			SDL_DestroyTexture(gTexture);
 			gTexture = nullptr;
@@ -849,10 +857,16 @@ void Game::run( )
 			}
 			if (menu.handleEvent(e)){
 				currentState = MENU;
+				isPaused = true;
+				pauseStartTime = SDL_GetTicks();
 			}
 			else if (currentState == MENU && e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
             // The escape key was pressed while in the menu state, switch back to the gameplay state
-            currentState = GAME;
+				currentState = GAME;
+				isPaused = false;
+				startTime += SDL_GetTicks() - pauseStartTime;
+				bullet_time += SDL_GetTicks() - pauseStartTime;
+				pauseStartTime = 0;
         	}
 			// if(e.type == SDL_MOUSEBUTTONDOWN){
 			// //this is a good location to add pigeon in linked list.
@@ -881,16 +895,23 @@ void Game::run( )
 				}
 			}
 		}
+
+		if (!isPaused) {
+			current_time = SDL_GetTicks();
+			currentTime2 = SDL_GetTicks();
+		}
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
 		tower.render();
-		if (current_time - bullet_time >= 2000)
+		if (!isPaused && current_time - bullet_time >= 2000)
 		{
 			breakthrough.createObject(800, 400, "bullet");
 			bullet_time = current_time;
 		}
+		if (!isPaused){
 		breakthrough.drawObjects();
 		breakthrough.detect_collision();
+		}
 		if (currentState == MENU){
 			menu.renderMenuScreen(gRenderer, e);
 			mouseClick.render(gRenderer);
@@ -899,7 +920,26 @@ void Game::run( )
 			continue;
 		}
 
-		
+
+		if (!isPaused){
+		// Calculate elapsed time in seconds
+		Uint32 elapsedTime = (currentTime2 - startTime) / 1000;
+
+		// Create a string to display the timer
+		std::string timerText = "Time: " + std::to_string(120-elapsedTime);
+
+		// Render the timer text
+		// You'll need to replace this with the actual code to render text in your game
+		renderText(timerText, 600 , 20);
+
+		// If the elapsed time is greater than the duration of your game, end the game
+		if (elapsedTime > gameDuration) {
+			quit = true;
+			// endGame();
+		}
+		}
+
+		cannon1.render();
 		menu.render(gRenderer);
 		mouseClick.render(gRenderer);
 		// healthbar.render();
@@ -910,4 +950,45 @@ void Game::run( )
 		//SDL_Delay can be lowered to 10-20 for smoother animation
 	}
 			
+}
+
+void Game::renderText(const std::string& text, int x, int y) {
+	// Load the font
+	TTF_Font* font = TTF_OpenFont("Assets/Font.ttf", 24);
+	if (font == nullptr) {
+		std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;
+		return;
+	}
+
+	// Create a color for the text
+	SDL_Color color = {255, 255, 255, 255};  // White color
+
+	// Create a surface from the text
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+	if (surface == nullptr) {
+		std::cerr << "Failed to create text surface: " << TTF_GetError() << std::endl;
+		TTF_CloseFont(font);
+		return;
+	}
+
+	// Create a texture from the surface
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+	if (texture == nullptr) {
+		std::cerr << "Failed to create text texture: " << SDL_GetError() << std::endl;
+	}
+
+	// Free the surface as it's no longer needed
+	SDL_FreeSurface(surface);
+
+	// Create a rectangle for the texture
+	SDL_Rect dst = {x, y, surface->w, surface->h};
+
+	// Render the texture
+	SDL_RenderCopy(gRenderer, texture, nullptr, &dst);
+
+	// Free the texture as it's no longer needed
+	SDL_DestroyTexture(texture);
+
+	// Close the font
+	TTF_CloseFont(font);
 }

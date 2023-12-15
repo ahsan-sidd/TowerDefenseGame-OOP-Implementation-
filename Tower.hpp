@@ -13,7 +13,7 @@ public:
     ~Tower();
     void render();
 private:
-    SDL_Renderer* gRenderer;
+    // SDL_Renderer* gRenderer;
     SDL_Texture* towerTexture;
     SDL_Rect towerRect;
     HealthBar healthbar;
