@@ -7,11 +7,25 @@ This is game made in C++ using Object Oriented Programming. This code follows OO
 The objective of the game is to destroy the tower/wall using characters with unique abilities. The characters can be bought and deployed anywhere before the base line. Characters can be bought using Elixir, an ingame currency that uses a timer to auto-fill. The user must strategically spend this elixir on characters that will complete the objective before the time runs out. The tower/wall also use weopons like canons and arrows to shoot our characters. This game has 3 difficulty levels which can only be unlocked after completing the previous level.
 
 ## Screens (Prototype)
---insert here
-![Intro Screen](Assets/Screenshots/Intro.png)
-![Start Screen](Assets/Screenshots/StartScreen.png)
-![Character Select Screen](Assets/Screenshots/CharacterSelect.png)
-![Menu Screen](Assets/Screenshots/Menu.png)
+<p align="center">
+    <img src="Assets/Screenshots/Intro.png" alt="Intro Screen"><br>
+    <em>Intro Screen</em>
+</p>
+
+<p align="center">
+    <img src="Assets/Screenshots/StartScreen.png" alt="Start Screen"><br>
+    <em>Start Screen</em>
+</p>
+
+<p align="center">
+    <img src="Assets/Screenshots/CharacterSelect.png" alt="Character Select Screen"><br>
+    <em>Character Select Screen</em>
+</p>
+
+<p align="center">
+    <img src="Assets/Screenshots/Menu.png" alt="Menu Screen"><br>
+    <em>Menu Screen</em>
+</p>
 
 
 ## Creators
