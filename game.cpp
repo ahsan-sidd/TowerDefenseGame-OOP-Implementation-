@@ -882,6 +882,8 @@ void Game::run( )
 			// 	}
 			// }
 
+
+
 			if (e.type == SDL_KEYDOWN)
 			{
 				if (e.key.keysym.sym == SDLK_1 && healspell.get_num_uses() > 0)
@@ -895,6 +897,8 @@ void Game::run( )
 					// Move character if right arrow key is pressed
 					ninja->move();
 				}
+
+				
 
 				else if (e.key.keysym.sym == SDLK_DOWN)
 				{
@@ -911,6 +915,14 @@ void Game::run( )
 
 			}
 		}
+
+		if (ninja->isAttacking == true){
+				ninja->attack();
+				if (ninja->get_mover().x >=760)
+				{
+					tower.get_healthbar().reduce_health(ninja->get_damage());
+				}
+			}
 
 		if (!isPaused) {
 			current_time = SDL_GetTicks();

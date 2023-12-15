@@ -28,22 +28,22 @@ void Ninja::move(){
 	// int attackDistance = 50;
 	if (get_mover().x < 800)
 	{
-		if (WanimationDelay == 4){
-			frameCount = (frameCount + 1) % 8;  // Keep frameCount between 0 and 7
-			if (frameCount == 0){
+		// if (WanimationDelay == 4){
+			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
+			if (WframeCount == 0){
 				get_src().x = 0;
-				get_src().y = 0;
+				// get_src().y = 0;
 			}
 			else{
 				get_src().x += 128;
 			}
-			WanimationDelay = 0;
-		}
+			// WanimationDelay = 0;
 		get_mover().x += 7;
 		hb.set_x(7);
-		WanimationDelay++;
+		}
+		// WanimationDelay++;
 		isAttacking = false;  // The Ninja is not attacking
-	}
+	// }
 }
 
 void Ninja::draw(Unit* ptr)
@@ -87,11 +87,11 @@ void Ninja::draw(Unit* ptr)
 void Ninja::attack()
 {
 	// game.assets = attackTexture;
-	if (AanimationDelay == 3){
-		frameCount = (frameCount + 1) % 4;  // Keep frameCount between 0 and 3
-		if (frameCount == 0){
+	if (AanimationDelay == 2){
+		AframeCount = (AframeCount + 1) % 4;  // Keep frameCount between 0 and 3
+		if (AframeCount == 0){
 			get_src().x = 0;
-			get_src().y = 0;
+			// get_src().y = 0;
 		}
 		else{
 			get_src().x += 128;
@@ -100,6 +100,10 @@ void Ninja::attack()
 	}
 	else {
 		AanimationDelay++;
+	}
+	if (AframeCount == 3){
+		isAttacking = false;
+		// frameCount = 0;
 	}
 }
 

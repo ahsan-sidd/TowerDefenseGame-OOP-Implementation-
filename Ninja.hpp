@@ -13,10 +13,11 @@ class Ninja : public Unit{
     // int attack_frame = 0;
     int WanimationDelay = 0;
     int AanimationDelay = 0;
-    int frameCount = 0;
+    int WframeCount = 0;
+    int AframeCount = 0;
     int current_health = 50;
     int max_health = 50;
-    int damage = 10;
+    int damage = 1;
     HealthBar hb;
 
 public:
