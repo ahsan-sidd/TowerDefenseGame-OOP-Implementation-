@@ -42,14 +42,48 @@ void Ninja::move(){
 		hb.set_x(7);
 		}
 		// WanimationDelay++;
+		isMoving = true;
 		isAttacking = false;  // The Ninja is not attacking
 	// }
+}
+
+void Ninja::moveBack(){
+	if (get_mover().x > 0)  // Check if the Ninja is not at the left edge of the screen
+	{
+		WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
+		if (WframeCount == 0){
+			get_src().x = 0;
+		}
+		else{
+			get_src().x += 128;
+		}
+		get_mover().x -= 7;  // Decrease the x position to move left
+		hb.set_x(-7);  // Update the health bar position
+		isMoving = true;
+		isAttacking = false;  // The Ninja is not attacking
+	}
 }
 
 void Ninja::draw(Unit* ptr)
 {
 	SDL_Texture* texture;
-	if (isAttacking) {
+	if (isJumping){
+		switch (Game::character) {
+			case SAMURAI:
+				texture = SamuraiJumpTexture;
+				break;
+			case SHINOBI:
+				texture = ShinobiJumpTexture;
+				break;
+			case FIGHTER:
+				texture = FighterJumpTexture;
+				break;
+			default:
+				texture = Game::assets;  // Default to the original texture
+				break;
+		}
+	}
+	else if (isAttacking) {
 		switch (Game::character) {
 			case SAMURAI:
 				texture = SamuraiAttackTexture;
@@ -64,7 +98,7 @@ void Ninja::draw(Unit* ptr)
 				texture = Game::assets;  // Default to the original texture
 				break;
 		}
-	} else {
+	} else if (isMoving) {
 		switch (Game::character) {
 			case SAMURAI:
 				texture = SamuraiWalkTexture;
@@ -74,6 +108,21 @@ void Ninja::draw(Unit* ptr)
 				break;
 			case FIGHTER:
 				texture = FighterWalkTexture;
+				break;
+			default:
+				texture = Game::assets;  // Default to the original texture
+				break;
+		}
+	} else {
+		switch (Game::character) {
+			case SAMURAI:
+				texture = SamuraiIdleTexture;
+				break;
+			case SHINOBI:
+				texture = ShinobiIdleTexture;
+				break;
+			case FIGHTER:
+				texture = FighterIdleTexture;
 				break;
 			default:
 				texture = Game::assets;  // Default to the original texture
@@ -104,6 +153,52 @@ void Ninja::attack()
 	if (AframeCount == 3){
 		isAttacking = false;
 		// frameCount = 0;
+	}
+}
+
+void Ninja::jump(){
+	if (!isJumping) {
+		isJumping = true;
+		JframeCount = 0;
+		yVelocity = -20;  // Initial upward velocity
+	}
+
+	if (yVelocity < 20) {  // Limit the downward velocity to 20
+		yVelocity += 1;  // Gravity effect
+	}
+
+	get_mover().y += yVelocity;  // Apply the velocity to the y position
+	hb.set_y(yVelocity);  // Update the health bar position
+
+	if (JanimationDelay == 5){
+		JanimationDelay = 0;
+		if (JframeCount == 0){
+			get_src().x = 0;
+		}
+		else{
+			get_src().x += 128;
+		}
+
+		JframeCount = (JframeCount + 1) % 10;  // Keep frameCount between 0 and 9
+	}
+	else {
+		JanimationDelay++;
+	}
+	if (get_mover().y >= 558){  // Check if the Ninja has reached the ground
+		get_mover().y = 558;
+		isJumping = false;
+		yVelocity = 0;  // Reset the velocity so the Ninja doesn't continue to move downwards
+	}
+}
+
+void Ninja::idle(){
+	WframeCount = (WframeCount + 1) % 6;  // Keep frameCount between 0 and 7
+	if (WframeCount == 0){
+		get_src().x = 0;
+		// get_src().y = 0;
+	}
+	else{
+		get_src().x += 128;
 	}
 }
 

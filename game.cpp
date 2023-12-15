@@ -849,6 +849,7 @@ void Game::run( )
 		std::string backgroundPath = "Assets/Backgrounds/Level" + std::to_string(level) + ".png";
 		gTexture = loadTexture(backgroundPath);
 		//Handle events on queue
+		ninja->isMoving = false;
 		while( SDL_PollEvent( &e ) != 0 )
 		{	
 			mouseClick.handleEvent(e);
@@ -881,7 +882,7 @@ void Game::run( )
 			// 		// std::cout << "Level: " << level << std::endl;
 			// 	}
 			// }
-
+		
 
 
 			if (e.type == SDL_KEYDOWN)
@@ -898,7 +899,15 @@ void Game::run( )
 					ninja->move();
 				}
 
-				
+				else if (e.key.keysym.sym == SDLK_LEFT){
+					ninja->moveBack();
+				}
+
+				else if (e.key.keysym.sym == SDLK_UP)
+				{
+					// Move character if right arrow key is pressed
+					ninja->jump();
+				}
 
 				else if (e.key.keysym.sym == SDLK_DOWN)
 				{
@@ -916,6 +925,7 @@ void Game::run( )
 			}
 		}
 
+		
 		if (ninja->isAttacking == true){
 				ninja->attack();
 				if (ninja->get_mover().x >=760)
@@ -924,9 +934,20 @@ void Game::run( )
 				}
 			}
 
+		if (ninja->isJumping == true){
+			ninja->jump();
+			if (ninja->get_mover().y > 558)
+			{
+				ninja->isJumping = false;
+			}
+		}
+
+		if (!ninja->isJumping && !ninja->isAttacking && !ninja->isMoving){
+			ninja->idle();
+		}
+
 		if (!isPaused) {
 			current_time = SDL_GetTicks();
-			currentTime2 = SDL_GetTicks();
 		}
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
@@ -955,7 +976,7 @@ void Game::run( )
 
 		if (!isPaused){
 		// Calculate elapsed time in seconds
-		Uint32 elapsedTime = (currentTime2 - startTime) / 1000;
+		Uint32 elapsedTime = (current_time - startTime) / 1000;
 
 		// Create a string to display the timer
 		std::string timerText = "Time: " + std::to_string(120-elapsedTime);

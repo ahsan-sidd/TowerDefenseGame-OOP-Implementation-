@@ -37,6 +37,11 @@ void HealthBar::set_x(int value)
     x += value;
 }
 
+void HealthBar::set_y(int value)
+{
+    y += value;
+}
+
 int HealthBar::get_current_health()
 {
     return current_health;
