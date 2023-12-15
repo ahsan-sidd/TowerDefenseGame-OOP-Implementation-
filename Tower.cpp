@@ -23,3 +23,8 @@ void Tower::render() {
     healthbar.render();
 }
 
+HealthBar& Tower::get_healthbar()
+{
+    return healthbar;
+}
+

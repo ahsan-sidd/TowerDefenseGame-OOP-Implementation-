@@ -45,5 +45,4 @@ int HealthBar::get_current_health()
 void HealthBar::set_current_health(int amount)
 {
     current_health += amount;
-    std::cout << "health: " << current_health;
 }

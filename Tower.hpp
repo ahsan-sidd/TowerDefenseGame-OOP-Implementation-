@@ -12,6 +12,7 @@ public:
     Tower(SDL_Renderer* renderer, const std::string& imagePath, int x, int y, int width, int height);
     ~Tower();
     void render();
+    HealthBar& get_healthbar();
 private:
     // SDL_Renderer* gRenderer;
     SDL_Texture* towerTexture;

@@ -44,10 +44,6 @@ void Ninja::move(){
 		WanimationDelay++;
 		isAttacking = false;  // The Ninja is not attacking
 	}
-	else{
-		attack();
-		isAttacking = true;  // The Ninja is attacking
-	}
 }
 
 void Ninja::draw(Unit* ptr)

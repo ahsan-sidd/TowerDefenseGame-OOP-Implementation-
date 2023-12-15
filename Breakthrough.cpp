@@ -7,9 +7,12 @@
 void Breakthrough::drawObjects()
 {
     // call draw functions of all the objects here
-    for (Unit* unit : characters_list) {
-        unit->draw(unit);
-        // unit->move();
+    if (!characters_list.empty())
+    {
+        for (Unit* unit : characters_list) {
+            unit->draw(unit);
+            // unit->move();
+        }
     }
 
     for (Unit* unit : bullets_list) {
@@ -47,12 +50,14 @@ void Breakthrough::detect_collision()
                 (*firstCharacter)->get_health().reduce_health(damage);
 
                 // Check if health of character is <= 0. If so, remove character from screen and list
-                if ((*firstCharacter)->get_health().get_current_health() <= 0)
-                {
-                    delete *firstCharacter;
-                    *firstCharacter = nullptr;
-                    firstCharacter = characters_list.erase(firstCharacter);
-                }
+                // if ((*firstCharacter)->get_health().get_current_health() <= 0)
+                // {
+                //     delete *firstCharacter;
+                //     // *firstCharacter = nullptr;
+                //     firstCharacter = characters_list.erase(firstCharacter);
+                //     std::cout << "size after death: " << characters_list.size();
+                //     // std::cout << "game over";
+                // }
 
                 delete *bulletIter;
                 *bulletIter = nullptr;
@@ -102,15 +107,13 @@ void Breakthrough::createObject(int x, int y, string object_to_create)
     {
         bullets_list.push_back(ptr);   
     }
-    std::cout << "length: " << bullets_list.size() << "\n";
-    std::cout << ptr << "\n";
-    std::cout << "Mouse clicked at: " << x << " -- " << y << std::endl;
 }
 
 Breakthrough::~Breakthrough()
 {
     for (Unit* unit : characters_list) {
         delete unit;
-        unit = nullptr;
     }
+    characters_list.clear();
+    std::cout << "size of bullet list: " << bullets_list.size();
 }

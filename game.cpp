@@ -4,6 +4,7 @@
 #include "Breakthrough.hpp"
 #include <string>
 #include "HealSpell.hpp"
+#include "Ninja.hpp"
 
 Character Game::character = SAMURAI;
 Game::Game(){};
@@ -806,6 +807,7 @@ void Game::run( )
 	breakthrough.createObject(100, 558, "character");
 
 	auto character_iter = breakthrough.characters_list.begin();
+	Ninja* ninja = dynamic_cast<Ninja*>(*character_iter);
 
 	Uint32 current_time;
 	Uint32 currentTime2;
@@ -891,8 +893,22 @@ void Game::run( )
 				else if (e.key.keysym.sym == SDLK_RIGHT)
 				{
 					// Move character if right arrow key is pressed
-					(*character_iter)->move();
+					ninja->move();
 				}
+
+				else if (e.key.keysym.sym == SDLK_DOWN)
+				{
+					// Move character if right arrow key is pressed
+					ninja->attack();
+					ninja->isAttacking = true;
+					if (ninja->get_mover().x >=760)
+					{
+						tower.get_healthbar().reduce_health(ninja->get_damage());
+					}
+
+				}
+
+
 			}
 		}
 
@@ -911,6 +927,10 @@ void Game::run( )
 		if (!isPaused){
 		breakthrough.drawObjects();
 		breakthrough.detect_collision();
+		if (ninja->get_health().get_current_health() <= 0 or tower.get_healthbar().get_current_health() <= 0)
+		{
+			quit = true;
+		}
 		}
 		if (currentState == MENU){
 			menu.renderMenuScreen(gRenderer, e);
