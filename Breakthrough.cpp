@@ -42,7 +42,7 @@ void Breakthrough::detect_collision()
             auto firstCharacter = characters_list.begin();
             
             // check for collision, decrease health of character and remove bullet from screen and list if collision detected
-            if ((*bulletIter)->get_mover().x < (*firstCharacter)->get_mover().x + 80)
+            if ((*bulletIter)->get_mover().x < (*firstCharacter)->get_mover().x + 80 and (*bulletIter)->get_mover().x > (*firstCharacter)->get_mover().x + 20 and (*bulletIter)->get_mover().y < (*firstCharacter)->get_mover().y + 160 and (*bulletIter)->get_mover().y > (*firstCharacter)->get_mover().y)
             {
                 Bullet* bullet = dynamic_cast<Bullet*>(*bulletIter);
                 int damage = bullet->get_damage();
@@ -59,6 +59,12 @@ void Breakthrough::detect_collision()
                 //     // std::cout << "game over";
                 // }
 
+                delete *bulletIter;
+                *bulletIter = nullptr;
+                bulletIter = bullets_list.erase(bulletIter);
+            }
+            else if (*bulletIter != nullptr and (*bulletIter)->get_mover().x < 0)
+            {
                 delete *bulletIter;
                 *bulletIter = nullptr;
                 bulletIter = bullets_list.erase(bulletIter);

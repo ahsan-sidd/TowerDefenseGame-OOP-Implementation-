@@ -17,7 +17,7 @@ bool Game::init()
 	bool success = true;
 
 	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 	{
 		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
 		success = false;
@@ -121,6 +121,7 @@ bool Game::loadMedia()
 
 void Game::close()
 {
+	Mix_HaltMusic();
 	//Free loaded images
 	SDL_DestroyTexture(assets);
 	assets=NULL;
@@ -134,7 +135,8 @@ void Game::close()
 	gameMusic = NULL;
 	gRenderer = NULL;
 	//Quit SDL subsystems
-	Mix_CloseAudio();
+	
+	// Mix_CloseAudio();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -790,10 +792,10 @@ void Game::renderAttackAnimation(SDL_Texture* attackTexture, SDL_Texture* samura
 // }
 
 
-void Game::run( )
+bool Game::run( )
 {
 	Uint32 startTime = SDL_GetTicks();
-	Uint32 gameDuration = 120; // 2 minutes
+	Uint32 gameDuration = 60; // 1 minutes
 	Uint32 pauseStartTime = 0;
 	GameState currentState = GAME;
 	bool quit = false;
@@ -837,17 +839,15 @@ void Game::run( )
 	if (!menu.init(gRenderer)) {
 		printf("Failed to initialize Menu!\n");
 	}
+	std::string backgroundPath = "Assets/Backgrounds/Level" + std::to_string(level) + ".png";
+	gTexture = loadTexture(backgroundPath);
 
 	bool isPaused = false;
 	while( !quit )
 	{	
 		
-		if (gTexture != nullptr){
-			SDL_DestroyTexture(gTexture);
-			gTexture = nullptr;
-		}
-		std::string backgroundPath = "Assets/Backgrounds/Level" + std::to_string(level) + ".png";
-		gTexture = loadTexture(backgroundPath);
+		
+		
 		//Handle events on queue
 		ninja->isMoving = false;
 		while( SDL_PollEvent( &e ) != 0 )
@@ -857,6 +857,7 @@ void Game::run( )
 			if( e.type == SDL_QUIT )
 			{
 				quit = true;
+				return false;
 			}
 			if (menu.handleEvent(e)){
 				currentState = MENU;
@@ -979,7 +980,7 @@ void Game::run( )
 		Uint32 elapsedTime = (current_time - startTime) / 1000;
 
 		// Create a string to display the timer
-		std::string timerText = "Time: " + std::to_string(120-elapsedTime);
+		std::string timerText = "Time: " + std::to_string(60-elapsedTime);
 
 		// Render the timer text
 		// You'll need to replace this with the actual code to render text in your game
@@ -999,9 +1000,16 @@ void Game::run( )
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
-	    SDL_Delay(10);	//causes sdl engine to delay for specified miliseconds
+	    SDL_Delay(15);	//causes sdl engine to delay for specified miliseconds
 		//SDL_Delay can be lowered to 10-20 for smoother animation
 	}
+
+	if (gTexture != nullptr){
+		SDL_DestroyTexture(gTexture);
+		gTexture = nullptr;
+	}
+
+	return false;
 			
 }
 

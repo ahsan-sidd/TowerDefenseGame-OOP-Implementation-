@@ -24,38 +24,28 @@ Ninja::~Ninja(){
 	SDL_DestroyTexture(ShinobiAttackTexture);
 }
 
-void Ninja::move(){
-	// int attackDistance = 50;
-	if (get_mover().x < 800)
-	{
-		// if (WanimationDelay == 4){
+void Ninja::move() {
+	if (get_mover().x < 800) {
+		WanimationDelay++;
+		if (WanimationDelay >= 67) {  // Change the frame every 67 calls to this function
 			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
-			if (WframeCount == 0){
-				get_src().x = 0;
-				// get_src().y = 0;
-			}
-			else{
-				get_src().x += 128;
-			}
-			// WanimationDelay = 0;
-		get_mover().x += 7;
-		hb.set_x(7);
+			get_src().x = WframeCount * 128;  // Update the x position in the source rectangle
+			WanimationDelay = 0;  // Reset the delay counter
 		}
-		// WanimationDelay++;
+		get_mover().x += 7;  // Increase the x position to move right
+		hb.set_x(7);  // Update the health bar position
 		isMoving = true;
 		isAttacking = false;  // The Ninja is not attacking
-	// }
+	}
 }
 
-void Ninja::moveBack(){
-	if (get_mover().x > 0)  // Check if the Ninja is not at the left edge of the screen
-	{
-		WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
-		if (WframeCount == 0){
-			get_src().x = 0;
-		}
-		else{
-			get_src().x += 128;
+void Ninja::moveBack() {
+	if (get_mover().x > 0) {  // Check if the Ninja is not at the left edge of the screen
+		WanimationDelay++;
+		if (WanimationDelay >= 67) {  // Change the frame every 67 calls to this function
+			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
+			get_src().x = WframeCount * 128;  // Update the x position in the source rectangle
+			WanimationDelay = 0;  // Reset the delay counter
 		}
 		get_mover().x -= 7;  // Decrease the x position to move left
 		hb.set_x(-7);  // Update the health bar position
@@ -136,7 +126,7 @@ void Ninja::draw(Unit* ptr)
 void Ninja::attack()
 {
 	// game.assets = attackTexture;
-	if (AanimationDelay == 2){
+	if (AanimationDelay == 7){
 		AframeCount = (AframeCount + 1) % 4;  // Keep frameCount between 0 and 3
 		if (AframeCount == 0){
 			get_src().x = 0;

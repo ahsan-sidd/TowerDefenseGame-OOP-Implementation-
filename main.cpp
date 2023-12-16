@@ -1,29 +1,35 @@
 #include "game.hpp"
 
 int main(int argc, char *argv[]){
-    Game game;
     srand(time(NULL));
-    if( !game.init() ){
-		printf( "Failed to initialize!\n" );
-        return 0;
-	}
-		//Load media
-    // if( !game.loadMedia() ){
-    //     printf( "Failed to load media!\n" );
-    //     return 0;
-    // }
-    // game.StartScreen();
-    if (game.StartScreen() == false){
+
+    while (true) {
+        Game game;
+
+        if (!game.init()) {
+            printf("Failed to initialize!\n");
+            return 0;
+        }
+
+        if (game.StartScreen() == false) {
+            game.close();
+            return 0;
+        }
+
+        if (game.characterSelect() == false) {
+            game.close();
+            return 0;
+        }
+
+        if (game.run() == false) {
+            game.close();
+            return 0;
+        }
+
         game.close();
-        return 0;
     }
-    if (game.characterSelect() == false){
-        game.close();
-        return 0;
-    }
-    // game.characterSelect();
-    game.run();
-    game.close();
+
+    //Game doesnt restart right now
 
     return 0;
 }
