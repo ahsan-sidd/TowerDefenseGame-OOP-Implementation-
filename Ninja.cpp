@@ -27,7 +27,7 @@ Ninja::~Ninja(){
 void Ninja::move() {
 	if (get_mover().x < 800) {
 		WanimationDelay++;
-		if (WanimationDelay >= 67) {  // Change the frame every 67 calls to this function
+		if (WanimationDelay == 10000) {  // Change the frame every 134 calls to this function
 			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
 			get_src().x = WframeCount * 128;  // Update the x position in the source rectangle
 			WanimationDelay = 0;  // Reset the delay counter
@@ -42,7 +42,7 @@ void Ninja::move() {
 void Ninja::moveBack() {
 	if (get_mover().x > 0) {  // Check if the Ninja is not at the left edge of the screen
 		WanimationDelay++;
-		if (WanimationDelay >= 67) {  // Change the frame every 67 calls to this function
+		if (WanimationDelay == 10000) {  // Change the frame every 134 calls to this function
 			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
 			get_src().x = WframeCount * 128;  // Update the x position in the source rectangle
 			WanimationDelay = 0;  // Reset the delay counter

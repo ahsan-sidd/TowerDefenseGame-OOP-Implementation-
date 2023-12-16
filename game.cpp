@@ -833,7 +833,7 @@ bool Game::run( )
 	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
 	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
-	Cannon cannon1={Game::gRenderer, "Assets/cannon.png", 870, 540, 340*0.7, 278*0.7};
+	Cannon cannon1={Game::gRenderer, "Assets/cannon.png", 990, 540, 340*0.7, 278*0.7};
 	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {
@@ -897,10 +897,12 @@ bool Game::run( )
 				else if (e.key.keysym.sym == SDLK_RIGHT)
 				{
 					// Move character if right arrow key is pressed
+					ninja->isMoving = true;
 					ninja->move();
 				}
 
 				else if (e.key.keysym.sym == SDLK_LEFT){
+					ninja->isMoving = true;
 					ninja->moveBack();
 				}
 
