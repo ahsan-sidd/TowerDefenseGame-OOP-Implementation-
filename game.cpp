@@ -1162,7 +1162,7 @@ void Game::endGameScreen(bool win){
 	Mix_PlayMusic(creditsMusic, -1);
 	// Credits animation
 	TTF_Font* creditsFont = TTF_OpenFont("Assets/Font.ttf", 30);
-	std::vector<std::string> creditsTexts = {"Credits:", "Zohaib Aslam: The one who doesn't know how to 'commit'", "Ahsan Siddiqui: The one who did most of the work ;p", "Hassaan Tariq: Copilot cracker"};
+	std::vector<std::string> creditsTexts = {"Credits:", "Zohaib Aslam: The classes expert", "Ahsan Siddiqui: Sound guy", "Hassaan Tariq: All rounder"};
 	std::vector<SDL_Texture*> creditsTextures;
 	std::vector<SDL_Rect> creditsRects;
 
