@@ -50,4 +50,8 @@ int HealthBar::get_current_health()
 void HealthBar::set_current_health(int amount)
 {
     current_health += amount;
+    if (current_health >= max_health)
+    {
+        current_health = max_health;
+    }
 }
