@@ -797,6 +797,9 @@ bool Game::run( )
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 gameDuration = 60; // 1 minutes
 	Uint32 pauseStartTime = 0;
+	Uint32 bullet_spawn_time = 2000;
+	Uint32 last_decrease_time = startTime;
+
 	GameState currentState = GAME;
 	bool quit = false;
 	SDL_Event e;
@@ -967,10 +970,17 @@ bool Game::run( )
 		SDL_RenderClear(gRenderer); //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
 		tower.render();
-		if (!isPaused && current_time - bullet_time >= 2000)
+		
+		if (!isPaused && current_time - bullet_time >= bullet_spawn_time)
 		{
 			breakthrough.createObject(800, 400, "bullet");
 			bullet_time = current_time;
+		}
+		//decrease bullet spawn time by 200ms every 10 seconds
+		if (!isPaused && (current_time - last_decrease_time) >= 10000)
+		{
+			bullet_spawn_time -= 200;
+			last_decrease_time = current_time;
 		}
 		if (!isPaused){
 		breakthrough.drawObjects();
