@@ -1076,19 +1076,25 @@ void Game::renderText(const std::string& text, int x, int y) {
 
 void Game::endGameScreen(bool win){
 	Mix_HaltMusic();
-
+	
 	// Open the font
 	TTF_Font* font = TTF_OpenFont("Assets/Font.ttf", 70);
 	SDL_Surface* textSurface = nullptr;
 
+	Mix_Music* EndMusic = nullptr;
 	// Create a surface from the text
 	if (win){
 		textSurface = TTF_RenderText_Solid(font, "You Win", SDL_Color{255, 255, 255, 255});
+		//load lose music
+		EndMusic = Mix_LoadMUS("Assets/End/win.mp3");
 	}
 	else{
 		textSurface = TTF_RenderText_Solid(font, "You Lose", SDL_Color{255, 255, 255, 255});
+		//load win music
+		EndMusic = Mix_LoadMUS("Assets/End/lose.mp3");
 	}
-
+	//play music
+	Mix_PlayMusic(EndMusic, 0);
 	// Create a texture from the surface
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
@@ -1185,6 +1191,7 @@ void Game::endGameScreen(bool win){
 	for (auto& texture : creditsTextures) {
 		SDL_DestroyTexture(texture);
 	}
+	Mix_FreeMusic(EndMusic);
 	Mix_FreeMusic(creditsMusic);
 	TTF_CloseFont(creditsFont);
 }
