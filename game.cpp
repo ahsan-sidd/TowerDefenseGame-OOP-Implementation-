@@ -833,6 +833,7 @@ bool Game::run( )
 				{
 					healspell.effect(breakthrough.characters_list);
 					healspell.reduce_uses();
+					healspell.increase_bullet_damage();
 				}
 
 				else if (e.key.keysym.sym == SDLK_RIGHT or e.key.keysym.sym == SDLK_d)

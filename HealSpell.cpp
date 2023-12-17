@@ -1,6 +1,7 @@
 #include "HealSpell.hpp"
 #include "Breakthrough.hpp"
 #include <iostream>
+#include "Bullet.hpp"
 
 HealSpell::HealSpell(int effect, int time)
 : Spell(effect, time)
@@ -22,4 +23,8 @@ void HealSpell::effect(std::list<Unit*> characters_list)
         count++;
     }
 
+}
+
+void HealSpell::increase_bullet_damage() {
+    Bullet::set_damage();
 }

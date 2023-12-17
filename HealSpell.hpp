@@ -10,4 +10,6 @@ public:
     HealSpell(int effect, int time);
     ~HealSpell();
     void effect(std::list<Unit*> characters_list);
+    void increase_bullet_damage();
+
 };

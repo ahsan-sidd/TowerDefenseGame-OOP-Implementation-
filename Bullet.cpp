@@ -27,3 +27,12 @@ int Bullet::get_damage()
 {
     return damage;
 }
+
+
+
+void Bullet::set_damage()
+{
+    damage += 5;
+}
+
+int Bullet::damage = 5;
