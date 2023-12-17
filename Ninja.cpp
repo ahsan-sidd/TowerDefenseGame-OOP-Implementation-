@@ -2,18 +2,8 @@
 #include "Ninja.hpp"
 #include <iostream>
 #include "HealthBar.hpp"
-// pigeon implementation will go here.
 
-
-// in project implementation this draw function should only be in superclass
-// void Pigeon::draw(){
-//     SDL_RenderCopy(Drawing::gRenderer, Drawing::assets, &srcRect, &moverRect);
-// }
-
-
-// fly() is overrided from the superclass
 Game game;
-// Add a new property to the Ninja class to track whether it's attacking or not
 
 Ninja::~Ninja(){
 	SDL_DestroyTexture(SamuraiWalkTexture);
@@ -202,11 +192,6 @@ void Ninja::idle(){
 Ninja::Ninja(SDL_Rect s, SDL_Rect m) : Unit(s, m), srcRect{s}, moverRect{m}, hb(Game::gRenderer, moverRect.x + 40, moverRect.y - 5, current_health, max_health){
 
 }
-
-// bool Ninja::hasHealthBar()
-// {
-//     return true;
-// }
 
 HealthBar& Ninja::get_health()
 {

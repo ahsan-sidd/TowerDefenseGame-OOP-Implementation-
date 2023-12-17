@@ -10,7 +10,6 @@ class Ninja : public Unit{
     SDL_Rect srcRect, moverRect;
     int movement_frame = 0;
     int movement_speed = 10;
-    // int attack_frame = 0;
     int WanimationDelay = 0;
     int AanimationDelay = 0;
     int JanimationDelay = 0;
@@ -23,7 +22,6 @@ class Ninja : public Unit{
     HealthBar hb;
 
 public:
-    // add the fly function here as well.
     ~Ninja();
     void draw(Unit* ptr);
     void move();

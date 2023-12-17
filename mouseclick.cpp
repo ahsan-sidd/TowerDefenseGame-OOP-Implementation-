@@ -71,8 +71,6 @@ void MouseClick::render(SDL_Renderer* renderer) {
     int xMouse, yMouse;
     SDL_GetMouseState(&xMouse, &yMouse);
 
-    // std::cout << "cursorRect: " << cursorRect.w << cursorRect.h << std::endl;
-
     // Update the cursor position
     cursorRect.x = xMouse;
     cursorRect.y = yMouse;

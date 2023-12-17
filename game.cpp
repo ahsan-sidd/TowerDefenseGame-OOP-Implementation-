@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include "Char.hpp"
 #include "HealthBar.hpp"
 #include "Breakthrough.hpp"
 #include <string>
@@ -100,7 +99,6 @@ bool Game::init()
 	}
 
 
-// Define tower properties (modify these according to your game logic)
 	return success;
 }
 
@@ -241,10 +239,7 @@ bool Game::StartScreen(){
 
 	SDL_Rect CharacterSrc;
 	CharacterSrc = {0, 0, 128, 128};
-	// int CharacterWidth = 160;//128*scaleFactor;
-	// int CharacterHeight = 160;//128*scaleFactor;
-	// int characterX = SCREEN_WIDTH*positionFactorX;
-	// int characterY = SCREEN_HEIGHT*positionFactorY;
+
 	int samuraiYVelocity = 0;
 	bool samuraiJumping = false;
 	SDL_Rect samuraiRect = {50, 558, 160, 160};
@@ -256,8 +251,6 @@ bool Game::StartScreen(){
 	int fighterYVelocity = 0;
 	bool fighterJumping = false;
 	SDL_Rect fighterRect = {250, 558, 160, 160};
-	// Character.moverRect = {characterX, characterY, CharacterWidth, CharacterHeight};
-
 
     bool quit = false;
     bool renderButton = true;
@@ -332,21 +325,18 @@ bool Game::StartScreen(){
 					quit = true;
             	}
 				else if (xMouse >= samuraiRect.x+30 && xMouse <= samuraiRect.x + samuraiRect.w-30 && yMouse >= samuraiRect.y+30 && yMouse <= samuraiRect.y + samuraiRect.h-30) {
-       				samuraiYVelocity = -20; // Adjust as needed
+       				samuraiYVelocity = -20;
         			samuraiJumping = true;
-					// characterFrame = 12;
 					Mix_PlayChannel(-1, jumpSound, 0);
     			}
 				else if (xMouse >= shinobiRect.x+30 && xMouse <= shinobiRect.x + shinobiRect.w-30 && yMouse >= shinobiRect.y+30 && yMouse <= shinobiRect.y + shinobiRect.h-30) {
-	   				shinobiYVelocity = -20; // Adjust as needed
+	   				shinobiYVelocity = -20;
 					shinobiJumping = true;
-					// characterFrame = 12;
 					Mix_PlayChannel(-1, jumpSound, 0);
         		}
 				else if (xMouse >= fighterRect.x+30 && xMouse <= fighterRect.x + fighterRect.w-30 && yMouse >= fighterRect.y+30 && yMouse <= fighterRect.y + fighterRect.h-30) {
-					fighterYVelocity = -20; // Adjust as needed
+					fighterYVelocity = -20;
 					fighterJumping = true;
-					// characterFrame = 12;
 					Mix_PlayChannel(-1, jumpSound, 0);
 				}
 			}
@@ -356,8 +346,6 @@ bool Game::StartScreen(){
 					int h = e.window.data2;
 					cloudRect.w = w;
 					cloudRect.h = h;
-					// cloudRect2.w = w;
-					// cloudRect2.h = h*1.004;
 				}
 			}
     	}
@@ -402,8 +390,7 @@ bool Game::StartScreen(){
 	else{
 		SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &samuraiRect);   
 	}
-	// SDL_RenderCopy(gRenderer, samuraiStart, &CharacterSrc, &samuraiRect);
-	// CharacterMover.x += 100;
+
 	if (shinobiYVelocity < 20 and shinobiJumping){
 		shinobiYVelocity += 1;
 	}
@@ -419,8 +406,7 @@ bool Game::StartScreen(){
 	else{
 		SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &shinobiRect);   
 	}
-	// SDL_RenderCopy(gRenderer, shinobiStart, &CharacterSrc, &shinobiRect);
-	// CharacterMover.x += 100;
+
 	if (fighterYVelocity < 20 and fighterJumping){
 		fighterYVelocity += 1;
 	}
@@ -436,8 +422,6 @@ bool Game::StartScreen(){
 	else{
 		SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &fighterRect);   
 	}
-	// SDL_RenderCopy(gRenderer, fighterStart, &CharacterSrc, &fighterRect);
-	// CharacterMover.x = 50;
 
 	if (animationDelay == 6){
 
@@ -499,7 +483,6 @@ bool Game::characterSelect(){
     SDL_Rect shinobiDest = {480, 330, 160, 160};
     SDL_Rect fighterDest = {800, 330, 160, 160};
 
-	// assets = loadTexture("Assets/Backgrounds/5.png");
 	SDL_Texture* samuraiSelect = loadTexture("Assets/Samurai/Idle.png");
 	SDL_Texture* shinobiSelect = loadTexture("Assets/Shinobi/Idle.png");
 	SDL_Texture* fighterSelect = loadTexture("Assets/Fighter/Idle.png");
@@ -507,7 +490,6 @@ bool Game::characterSelect(){
 	SDL_Texture* fighterAttack = loadTexture("Assets/Fighter/Attack_3.png");
 	SDL_Texture* samuraiAttack = loadTexture("Assets/Samurai/Attack_2.png");
 	SDL_Texture* shinobiAttack = loadTexture("Assets/Shinobi/Attack_3.png");
-	// SDL_Texture* blackScreen = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 	SDL_Texture* characterSelect = loadTexture("Assets/Backgrounds/CharSelect.png");
 	SDL_Texture* charTop = loadTexture("Assets/Backgrounds/CharTop.png");
 	SDL_Rect charTopDest = {0, 0, 1244, 282};
@@ -682,11 +664,6 @@ bool Game::characterSelect(){
         }	
 
 		samuraiSrc.x = shinobiSrc.x = fighterSrc.x = frameIndex * 128;
-
-
-
-
-		// SDL_RenderCopy(gRenderer, samuraiText, &samuraiTextSrc, &samuraiTextDest);
 		
 
 		mouseClick.render(gRenderer);
@@ -769,27 +746,6 @@ void Game::renderAttackAnimation(SDL_Texture* attackTexture, SDL_Texture* samura
 	}
 }
 
-// void Game::fadeOut() {
-// 	SDL_Rect screenRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}; // Rectangle covering the entire screen
-
-// 	// Loop from 0 to 255, stepping by fadeSpeed
-// 	int j = 255;
-// 	for (int i = 0; i <= 255; i += 5) {
-// 		// Set the renderer color to black with the current alpha value
-// 		SDL_SetRenderDrawColor(gRenderer, i, i, i, j);
-
-// 		// Draw a rectangle over the entire screen
-// 		SDL_RenderFillRect(gRenderer, &screenRect);
-
-// 		// Update the screen
-// 		SDL_RenderPresent(gRenderer);
-
-// 		j -= 5;
-// 		// Wait for a short delay
-// 		SDL_Delay(15);
-// 	}
-// 	return;
-// }
 
 
 bool Game::run( )
@@ -821,26 +777,7 @@ bool Game::run( )
 	Uint32 current_time;
 	Uint32 bullet_time = SDL_GetTicks();
 
-	const Uint32 MS_PER_UPDATE = 50; //We can use this to separate the physics and animation speeds/updates 
-	//but that would require restructuring the code and honestly that is too much work for now
-
-	// if (character == SAMURAI){
-	// 	assets = loadTexture("Assets/Samurai/Walk.png");
-	// }
-	// else if (character == SHINOBI){
-	// 	assets = loadTexture("Assets/Shinobi/Walk.png");
-	// }
-	// else if (character == FIGHTER){
-	// 	assets = loadTexture("Assets/Fighter/Walk.png");
-	// }
-	// assets = loadTexture("Assets/Samurai/Walk.png");
-
-	// CharacterState currentState = WALKING;
-
-	// char* fontpath = "FreeSans.ttf";
-	// TTF_Init();
-	// TTF_Font *Font = TTF_OpenFont(fontpath, 24);
-	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
+	const Uint32 MS_PER_UPDATE = 50; 
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
 	Cannon cannon1={Game::gRenderer, "Assets/cannon.png", 990, 540, 340*0.7, 278*0.7};
 	SDL_Rect iconRect = {55, 200, 70, 70};
@@ -889,19 +826,6 @@ bool Game::run( )
 				bullet_time += SDL_GetTicks() - pauseStartTime;
 				pauseStartTime = 0;
         	}
-			// if(e.type == SDL_MOUSEBUTTONDOWN){
-			// //this is a good location to add pigeon in linked list.
-			// 	if (e.button.button == SDL_BUTTON_LEFT)
-			// 	{
-			// 		int xMouse, yMouse;
-			// 		SDL_GetMouseState(&xMouse,&yMouse);
-			// 		// breakthrough.createObject(xMouse, yMouse, "character");
-			// 		// level += 1;
-			// 		// std::cout << "Level: " << level << std::endl;
-			// 	}
-			// }
-		
-
 
 			if (e.type == SDL_KEYDOWN)
 			{
@@ -1030,11 +954,8 @@ bool Game::run( )
 		// Create a string to display the timer
 		std::string timerText = "Time: " + std::to_string(60-elapsedTime);
 
-		// Render the timer text
-		// You'll need to replace this with the actual code to render text in your game
 		renderText(timerText, 600 , 20);
 
-		// If the elapsed time is greater than the duration of your game, end the game
 		if (elapsedTime > gameDuration) {
 			quit = true;
 			endGameScreen(false);
@@ -1235,53 +1156,3 @@ void Game::endGameScreen(bool win){
 	Mix_FreeMusic(creditsMusic);
 	TTF_CloseFont(creditsFont);
 }
-	// Uint8 r, g, b, a;
-	// SDL_GetRenderDrawColor(gRenderer, &r, &g, &b, &a);
-
-	// // Assuming the tower's position is (towerX, towerY)
-	// int towerX = 100, towerY = 100;
-
-	// // Size of each frame
-	// int frameWidth = 96, frameHeight = 96;
-
-	// // Total number of frames in the sprite sheet
-	// int totalFrames = 12;
-
-	// // Current frame
-	// int currentFrame = 0;
-
-	// // Rectangle for source and destination
-	// SDL_Rect srcRect, dstRect;
-
-	// // Set the dimensions of the source rectangle
-	// srcRect.x = currentFrame * frameWidth;
-	// srcRect.y = 0;
-	// srcRect.w = frameWidth;
-	// srcRect.h = frameHeight;
-
-	// // Set the dimensions of the destination rectangle
-	// dstRect.x = towerX;
-	// dstRect.y = towerY;
-	// dstRect.w = frameWidth;
-	// dstRect.h = frameHeight;
-
-	// // Loop through each frame
-	// for (int i = 0; i < totalFrames; i++) {
-	// 	// Set the render draw color back to its original state
-	// 	SDL_SetRenderDrawColor(gRenderer, r, g, b, a);
-
-	// 	// Clear the renderer
-	// 	SDL_RenderClear(gRenderer);
-
-	// 	// Set the source rectangle x position to the current frame
-	// 	srcRect.x = i * frameWidth;
-
-	// 	// Render the current frame
-	// 	SDL_RenderCopy(gRenderer, explosion, &srcRect, &dstRect);
-
-	// 	// Update the screen
-	// 	SDL_RenderPresent(gRenderer);
-
-	// 	// Delay to control the speed of the animation
-	// 	SDL_Delay(100);
-	// }

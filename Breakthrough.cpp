@@ -86,22 +86,6 @@ void Breakthrough::detect_collision()
 
 void Breakthrough::createObject(int x, int y, string object_to_create)
 {
-    // int random = rand() % 3;
-    // if (random == 0)
-    // {
-    //     Unit pigeon = {{7, 88, 155, 103}, {x, y, 50, 50}};
-    //     pigeons.push_back(pigeon);
-    // }
-    // else if (random == 1)
-    // {
-    //     Unit butterfly = {{256, 24, 174, 134}, {x, y, 50, 50}};
-    //     butterflies.push_back(butterfly);
-    // }
-    // else 
-    // {
-    //     Unit bee = {{63, 619, 151, 166}, {x, y, 50, 50}};
-    //     bees.push_back(bee);
-    // }
 
     ObjectCreator oc;
     Unit* ptr = oc.getObject(x, y, object_to_create);

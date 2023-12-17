@@ -36,15 +36,8 @@ class Game{
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
 
-    //The window renderer
-    // SDL_Renderer* gRenderer = NULL;
-    // SDL_Renderer* mRenderer = NULL;
-
-
     //Current displayed texture
     SDL_Texture* gTexture = NULL;
-    //global reference to png image sheets
-    // SDL_Texture* assets=NULL;
 
     Mix_Music* gameMusic=NULL;
 

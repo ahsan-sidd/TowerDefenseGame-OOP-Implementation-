@@ -10,11 +10,9 @@ class Bullet : public Unit{
 
 
 public:
-    // add the fly function here as well.
     void draw(Unit* ptr);
     void move();
     void attack();
     Bullet(SDL_Rect s, SDL_Rect m, SDL_Texture* texture);
     int get_damage();
-    // may add other overloaded constructors here... 
 };
