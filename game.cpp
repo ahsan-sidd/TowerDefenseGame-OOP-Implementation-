@@ -809,6 +809,9 @@ bool Game::run( )
 	Breakthrough breakthrough;
 	HealSpell healspell(10, 2);
 
+	SDL_Texture* iconAvailable = loadTexture("Assets/heal.png");
+	SDL_Texture* iconUnavailable = loadTexture("Assets/emptyHeal.png");
+
 	breakthrough.createObject(100, 558, "character");
 
 	auto character_iter = breakthrough.characters_list.begin();
@@ -839,6 +842,7 @@ bool Game::run( )
 	// Tower tower (gRenderer,"Assets/Backgrounds/OK.png",0,-23,378,637);
 	Tower tower(gRenderer, "Assets/Backgrounds/OK.png", 900, 50, 378, 660);
 	Cannon cannon1={Game::gRenderer, "Assets/cannon.png", 990, 540, 340*0.7, 278*0.7};
+	SDL_Rect iconRect = {55, 200, 70, 70};
 	// HealthBar healthbar(gRenderer, 1000, 180, 200, 200);
 	Menu menu;
 	if (!menu.init(gRenderer)) {
@@ -1029,6 +1033,18 @@ bool Game::run( )
 		}
 		}
 
+		if (healspell.get_num_uses() > 0)
+		{
+			SDL_RenderCopy(gRenderer, iconAvailable, NULL, &iconRect);
+		}
+		else
+		{
+			SDL_RenderCopy(gRenderer, iconUnavailable, NULL, &iconRect);
+		}
+
+		std::string usesText = "Uses: " + std::to_string(healspell.get_num_uses());
+		renderText(usesText, iconRect.x, iconRect.y + iconRect.h + 10);
+		
 		cannon1.render();
 		menu.render(gRenderer);
 		mouseClick.render(gRenderer);
