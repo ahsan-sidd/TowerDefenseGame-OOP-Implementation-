@@ -847,6 +847,7 @@ bool Game::run( )
 	std::string backgroundPath = "Assets/Backgrounds/Level" + std::to_string(level) + ".png";
 	gTexture = loadTexture(backgroundPath);
 
+	Uint32 last_health_decrease = tower.get_healthbar().get_current_health(); //200
 	bool isPaused = false;
 	while( !quit )
 	{	
@@ -981,6 +982,11 @@ bool Game::run( )
 		{
 			bullet_spawn_time -= 200;
 			last_decrease_time = current_time;
+		}
+		if (!isPaused && last_health_decrease - tower.get_healthbar().get_current_health() >= 50)
+		{
+			bullet_spawn_time -= 100;
+			last_health_decrease = tower.get_healthbar().get_current_health();
 		}
 		if (!isPaused){
 		breakthrough.drawObjects();
