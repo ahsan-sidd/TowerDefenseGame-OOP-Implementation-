@@ -136,7 +136,7 @@ void Game::close()
 	gRenderer = NULL;
 	//Quit SDL subsystems
 	
-	// Mix_CloseAudio();
+	Mix_CloseAudio();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -847,9 +847,15 @@ bool Game::run( )
 	bool isPaused = false;
 	while( !quit )
 	{	
-		
-		
-		
+		Mix_VolumeMusic(menu.volume);
+		if (menu.GameQuit){
+			quit = true;
+			return false;
+		}
+		if (menu.GameRestart){
+			quit = true;
+			return true;
+		}
 		//Handle events on queue
 		ninja->isMoving = false;
 		while( SDL_PollEvent( &e ) != 0 )

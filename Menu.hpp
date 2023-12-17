@@ -17,11 +17,14 @@ public:
     bool handleEvent(SDL_Event& e);
     void render(SDL_Renderer* gRenderer);
     void renderMenuScreen(SDL_Renderer* gRenderer, SDL_Event& e);
+    int volume = 128;
+    bool GameQuit = false;
+    bool GameRestart = false;
 private:
     bool isDragging = false;
-    SDL_Rect sliderRect = {475, 314, 32, 32};
-    int sliderStartX = sliderRect.x;
-    int sliderEndX = sliderRect.x + 266;
+    SDL_Rect sliderRect = {741, 314, 32, 32};
+    int sliderStartX = 475;
+    int sliderEndX = 741;
     SDL_Rect MenuButtonRect;
     SDL_Texture* MenuNormalButtonTexture=NULL;
     SDL_Texture* MenuButtonTexture=NULL;

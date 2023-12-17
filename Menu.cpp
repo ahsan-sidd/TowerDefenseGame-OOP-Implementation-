@@ -100,6 +100,15 @@ void Menu::renderMenuScreen(SDL_Renderer* gRenderer, SDL_Event& e) {
     } else if (e.type == SDL_MOUSEMOTION && isDragging) {
         // The mouse moved while dragging, update the slider position
         sliderRect.x = std::max(sliderStartX, std::min(sliderEndX, mousePos.x));
+        volume = (sliderRect.x - sliderStartX) / (float)(sliderEndX - sliderStartX) * MIX_MAX_VOLUME;
+        std::cout << "Volume: " << volume << std::endl;
+        // Mix_Volume(-1, volume);
+    }
+    if (e.type == SDL_MOUSEBUTTONDOWN && SDL_PointInRect(&mousePos, &QuitRect)){
+        GameQuit = true;
+    }
+    if (e.type == SDL_MOUSEBUTTONDOWN && SDL_PointInRect(&mousePos, &RestartRect)){
+        GameRestart = true;
     }
     
 
