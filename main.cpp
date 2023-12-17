@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
             return 0;
         }
 
+        // game.endGameWin();
         if (game.StartScreen() == false) {
             game.close();
             return 0;

@@ -38,6 +38,7 @@ public:
     bool isAttacking = false;
     bool isJumping = false;
     bool isMoving = false;
+    bool isMovingBack = false;
     int yVelocity = -20;
     SDL_Texture* SamuraiWalkTexture = Game::loadTexture("Assets/Samurai/Walk.png");
     SDL_Texture* SamuraiAttackTexture = Game::loadTexture("Assets/Samurai/Attack_2.png");

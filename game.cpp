@@ -812,8 +812,10 @@ bool Game::run( )
 	Ninja* ninja = dynamic_cast<Ninja*>(*character_iter);
 
 	Uint32 current_time;
-	Uint32 currentTime2;
 	Uint32 bullet_time = SDL_GetTicks();
+
+	const Uint32 MS_PER_UPDATE = 50; //We can use this to separate the physics and animation speeds/updates 
+	//but that would require restructuring the code and honestly that is too much work for now
 
 	// if (character == SAMURAI){
 	// 	assets = loadTexture("Assets/Samurai/Walk.png");
@@ -894,27 +896,29 @@ bool Game::run( )
 					healspell.reduce_uses();
 				}
 
-				else if (e.key.keysym.sym == SDLK_RIGHT)
+				else if (e.key.keysym.sym == SDLK_RIGHT or e.key.keysym.sym == SDLK_d)
 				{
 					// Move character if right arrow key is pressed
+					std::cout << "right" << std::endl;
 					ninja->isMoving = true;
 					ninja->move();
 				}
 
-				else if (e.key.keysym.sym == SDLK_LEFT){
+				else if (e.key.keysym.sym == SDLK_LEFT or e.key.keysym.sym == SDLK_a){
 					ninja->isMoving = true;
 					ninja->moveBack();
 				}
 
-				else if (e.key.keysym.sym == SDLK_UP)
+				else if (e.key.keysym.sym == SDLK_UP or e.key.keysym.sym == SDLK_w)
 				{
 					// Move character if right arrow key is pressed
 					ninja->jump();
 				}
 
-				else if (e.key.keysym.sym == SDLK_DOWN)
+				else if (e.key.keysym.sym == SDLK_x)
 				{
 					// Move character if right arrow key is pressed
+					std::cout << "attack" << std::endl;
 					ninja->attack();
 					ninja->isAttacking = true;
 					if (ninja->get_mover().x >=760)
@@ -930,11 +934,13 @@ bool Game::run( )
 
 		
 		if (ninja->isAttacking == true){
+				std::cout << "attack" << std::endl;
 				ninja->attack();
 				if (ninja->get_mover().x >=760)
 				{
 					tower.get_healthbar().reduce_health(ninja->get_damage());
 				}
+				// if (ninja->AframeCount)
 			}
 
 		if (ninja->isJumping == true){
@@ -963,8 +969,13 @@ bool Game::run( )
 		if (!isPaused){
 		breakthrough.drawObjects();
 		breakthrough.detect_collision();
-		if (ninja->get_health().get_current_health() <= 0 or tower.get_healthbar().get_current_health() <= 0)
+		if (ninja->get_health().get_current_health() <= 0)
 		{
+			quit = true;
+		}
+		if (tower.get_healthbar().get_current_health() <= 0)
+		{	
+			endGameWin();
 			quit = true;
 		}
 		}
@@ -1055,3 +1066,123 @@ void Game::renderText(const std::string& text, int x, int y) {
 	// Close the font
 	TTF_CloseFont(font);
 }
+
+void Game::endGameWin(){
+	// Create a new SDL_Surface with the same size as the window
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+
+	// Fill the surface with a semi-transparent white color
+	SDL_FillRect(surface, NULL, SDL_MapRGBA(surface->format, 255, 255, 255, 128));
+
+	// Create a texture from the surface
+	SDL_Texture* overlayTexture = SDL_CreateTextureFromSurface(gRenderer, surface);
+
+	// Free the surface as it's no longer needed
+	SDL_FreeSurface(surface);
+
+	// Open the font
+	TTF_Font* font = TTF_OpenFont("Assets/Font.ttf", 70);
+
+	// Create a surface from the text
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "You Win", SDL_Color{0, 0, 0, 255});
+
+	// Create a texture from the surface
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+
+	// Free the surface as it's no longer needed
+	SDL_FreeSurface(textSurface);
+
+	// Create a rectangle for the overlay texture
+	SDL_Rect overlayDst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+	// Create a rectangle for the text texture
+	SDL_Rect textDst = {SCREEN_WIDTH / 2 - textSurface->w / 2, SCREEN_HEIGHT / 2 - textSurface->h / 2, textSurface->w, textSurface->h};
+
+	// Create an event variable
+	SDL_Event e;
+
+	// Wait for a click event
+	bool isClicked = false;
+	while (!isClicked) {
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT) {
+				isClicked = true;
+			} else if (e.type == SDL_MOUSEBUTTONDOWN) {
+				isClicked = true;
+			}
+		}
+
+		// Clear the screen
+		SDL_RenderClear(gRenderer);
+
+		// Render the overlay texture
+		SDL_RenderCopy(gRenderer, overlayTexture, nullptr, &overlayDst);
+
+		// Render the text texture
+		SDL_RenderCopy(gRenderer, textTexture, nullptr, &textDst);
+
+		mouseClick.render(gRenderer);
+
+		// Update the screen
+		SDL_RenderPresent(gRenderer);
+	}
+
+	// Free the overlay texture as it's no longer needed
+	SDL_DestroyTexture(overlayTexture);
+
+	// Free the text texture as it's no longer needed
+	SDL_DestroyTexture(textTexture);
+
+	// Close the font
+	TTF_CloseFont(font);
+}
+	// Uint8 r, g, b, a;
+	// SDL_GetRenderDrawColor(gRenderer, &r, &g, &b, &a);
+
+	// // Assuming the tower's position is (towerX, towerY)
+	// int towerX = 100, towerY = 100;
+
+	// // Size of each frame
+	// int frameWidth = 96, frameHeight = 96;
+
+	// // Total number of frames in the sprite sheet
+	// int totalFrames = 12;
+
+	// // Current frame
+	// int currentFrame = 0;
+
+	// // Rectangle for source and destination
+	// SDL_Rect srcRect, dstRect;
+
+	// // Set the dimensions of the source rectangle
+	// srcRect.x = currentFrame * frameWidth;
+	// srcRect.y = 0;
+	// srcRect.w = frameWidth;
+	// srcRect.h = frameHeight;
+
+	// // Set the dimensions of the destination rectangle
+	// dstRect.x = towerX;
+	// dstRect.y = towerY;
+	// dstRect.w = frameWidth;
+	// dstRect.h = frameHeight;
+
+	// // Loop through each frame
+	// for (int i = 0; i < totalFrames; i++) {
+	// 	// Set the render draw color back to its original state
+	// 	SDL_SetRenderDrawColor(gRenderer, r, g, b, a);
+
+	// 	// Clear the renderer
+	// 	SDL_RenderClear(gRenderer);
+
+	// 	// Set the source rectangle x position to the current frame
+	// 	srcRect.x = i * frameWidth;
+
+	// 	// Render the current frame
+	// 	SDL_RenderCopy(gRenderer, explosion, &srcRect, &dstRect);
+
+	// 	// Update the screen
+	// 	SDL_RenderPresent(gRenderer);
+
+	// 	// Delay to control the speed of the animation
+	// 	SDL_Delay(100);
+	// }

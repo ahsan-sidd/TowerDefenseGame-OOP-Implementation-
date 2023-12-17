@@ -25,17 +25,19 @@ Ninja::~Ninja(){
 }
 
 void Ninja::move() {
+	static Uint32 lastUpdate = SDL_GetTicks(); // Time of last animation frame update
+	Uint32 current = SDL_GetTicks(); // Current time
+
 	if (get_mover().x < 800) {
-		WanimationDelay++;
-		if (WanimationDelay == 10000) {  // Change the frame every 134 calls to this function
-			WframeCount = (WframeCount + 1) % 8;  // Keep frameCount between 0 and 7
-			get_src().x = WframeCount * 128;  // Update the x position in the source rectangle
-			WanimationDelay = 0;  // Reset the delay counter
+		if (current - lastUpdate >= 100) { // Change the frame every 100ms
+			WframeCount = (WframeCount + 1) % 8; // Keep frameCount between 0 and 7
+			get_src().x = WframeCount * 128; // Update the x position in the source rectangle
+			lastUpdate = current; // Update the time of last animation frame update
 		}
-		get_mover().x += 7;  // Increase the x position to move right
-		hb.set_x(7);  // Update the health bar position
+		get_mover().x += 7; // Increase the x position to move right
+		hb.set_x(7); // Update the health bar position
 		isMoving = true;
-		isAttacking = false;  // The Ninja is not attacking
+		isAttacking = false; // The Ninja is not attacking
 	}
 }
 
@@ -126,7 +128,11 @@ void Ninja::draw(Unit* ptr)
 void Ninja::attack()
 {
 	// game.assets = attackTexture;
-	if (AanimationDelay == 7){
+	if (!isAttacking) {
+		isAttacking = true;
+		// AframeCount = 0;
+	}
+	if (AanimationDelay == 5){
 		AframeCount = (AframeCount + 1) % 4;  // Keep frameCount between 0 and 3
 		if (AframeCount == 0){
 			get_src().x = 0;
