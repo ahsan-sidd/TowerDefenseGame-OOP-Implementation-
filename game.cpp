@@ -977,11 +977,12 @@ bool Game::run( )
 		breakthrough.detect_collision();
 		if (ninja->get_health().get_current_health() <= 0)
 		{
+			endGameScreen(false);
 			quit = true;
 		}
 		if (tower.get_healthbar().get_current_health() <= 0)
 		{	
-			endGameWin();
+			endGameScreen(true);
 			quit = true;
 		}
 		}
@@ -1008,7 +1009,7 @@ bool Game::run( )
 		// If the elapsed time is greater than the duration of your game, end the game
 		if (elapsedTime > gameDuration) {
 			quit = true;
-			// endGame();
+			endGameScreen(false);
 		}
 		}
 
@@ -1073,33 +1074,26 @@ void Game::renderText(const std::string& text, int x, int y) {
 	TTF_CloseFont(font);
 }
 
-void Game::endGameWin(){
-	// Create a new SDL_Surface with the same size as the window
-	SDL_Surface* surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
-
-	// Fill the surface with a semi-transparent white color
-	SDL_FillRect(surface, NULL, SDL_MapRGBA(surface->format, 255, 255, 255, 128));
-
-	// Create a texture from the surface
-	SDL_Texture* overlayTexture = SDL_CreateTextureFromSurface(gRenderer, surface);
-
-	// Free the surface as it's no longer needed
-	SDL_FreeSurface(surface);
+void Game::endGameScreen(bool win){
+	Mix_HaltMusic();
 
 	// Open the font
 	TTF_Font* font = TTF_OpenFont("Assets/Font.ttf", 70);
+	SDL_Surface* textSurface = nullptr;
 
 	// Create a surface from the text
-	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "You Win", SDL_Color{0, 0, 0, 255});
+	if (win){
+		textSurface = TTF_RenderText_Solid(font, "You Win", SDL_Color{255, 255, 255, 255});
+	}
+	else{
+		textSurface = TTF_RenderText_Solid(font, "You Lose", SDL_Color{255, 255, 255, 255});
+	}
 
 	// Create a texture from the surface
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
 	// Free the surface as it's no longer needed
 	SDL_FreeSurface(textSurface);
-
-	// Create a rectangle for the overlay texture
-	SDL_Rect overlayDst = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 	// Create a rectangle for the text texture
 	SDL_Rect textDst = {SCREEN_WIDTH / 2 - textSurface->w / 2, SCREEN_HEIGHT / 2 - textSurface->h / 2, textSurface->w, textSurface->h};
@@ -1118,14 +1112,14 @@ void Game::endGameWin(){
 			}
 		}
 
+		// Set the draw color to black
+		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+
 		// Clear the screen
 		SDL_RenderClear(gRenderer);
 
-		// Render the overlay texture
-		SDL_RenderCopy(gRenderer, overlayTexture, nullptr, &overlayDst);
-
 		// Render the text texture
-		SDL_RenderCopy(gRenderer, textTexture, nullptr, &textDst);
+		SDL_RenderCopy(gRenderer, textTexture, NULL, &textDst);
 
 		mouseClick.render(gRenderer);
 
@@ -1133,14 +1127,66 @@ void Game::endGameWin(){
 		SDL_RenderPresent(gRenderer);
 	}
 
-	// Free the overlay texture as it's no longer needed
-	SDL_DestroyTexture(overlayTexture);
-
 	// Free the text texture as it's no longer needed
 	SDL_DestroyTexture(textTexture);
 
 	// Close the font
 	TTF_CloseFont(font);
+
+	// Make the credits music
+	Mix_Music* creditsMusic = Mix_LoadMUS("Assets/Credits.mp3");
+
+	//Play credits music
+	Mix_PlayMusic(creditsMusic, -1);
+	// Credits animation
+	TTF_Font* creditsFont = TTF_OpenFont("Assets/Font.ttf", 30);
+	std::vector<std::string> creditsTexts = {"Credits:", "Zohaib Aslam: The one who doesn't know how to 'commit'", "Ahsan Siddiqui: The one who did most of the work ;p", "Hassaan Tariq: Copilot cracker"};
+	std::vector<SDL_Texture*> creditsTextures;
+	std::vector<SDL_Rect> creditsRects;
+
+	int y = SCREEN_HEIGHT;
+	for (const auto& text : creditsTexts) {
+		SDL_Surface* surface = TTF_RenderText_Solid(creditsFont, text.c_str(), SDL_Color{255, 255, 255, 255});
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(gRenderer, surface);
+		SDL_Rect rect = {SCREEN_WIDTH / 2 - surface->w / 2, y, surface->w, surface->h};
+		y += surface->h + 10;  // Add some space between lines
+
+		creditsTextures.push_back(texture);
+		creditsRects.push_back(rect);
+
+		SDL_FreeSurface(surface);
+	}
+
+	while (creditsRects.back().y + creditsRects.back().h > 0) {
+		
+		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+		SDL_RenderClear(gRenderer);
+
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT or e.type == SDL_MOUSEBUTTONDOWN) {
+				for (auto& texture : creditsTextures) {
+					SDL_DestroyTexture(texture);
+				}
+				TTF_CloseFont(creditsFont);
+				return;
+			}
+		}
+
+		for (size_t i = 0; i < creditsTextures.size(); ++i) {
+			SDL_RenderCopy(gRenderer, creditsTextures[i], NULL, &creditsRects[i]);
+			creditsRects[i].y -= 1;
+		}
+
+		mouseClick.render(gRenderer);
+		SDL_RenderPresent(gRenderer);
+		SDL_Delay(10);
+	}
+
+	for (auto& texture : creditsTextures) {
+		SDL_DestroyTexture(texture);
+	}
+	Mix_FreeMusic(creditsMusic);
+	TTF_CloseFont(creditsFont);
 }
 	// Uint8 r, g, b, a;
 	// SDL_GetRenderDrawColor(gRenderer, &r, &g, &b, &a);
