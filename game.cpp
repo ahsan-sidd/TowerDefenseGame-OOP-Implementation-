@@ -799,6 +799,7 @@ bool Game::run( )
 	Uint32 pauseStartTime = 0;
 	Uint32 bullet_spawn_time = 2000;
 	Uint32 last_decrease_time = startTime;
+	Uint32 last_increase_time = startTime;
 
 	GameState currentState = GAME;
 	bool quit = false;
@@ -1012,6 +1013,13 @@ bool Game::run( )
 			SDL_RenderPresent(gRenderer);
 			SDL_Delay(10);
 			continue;
+		}
+
+		// Increase uses every 15 seconds
+		if (!isPaused && (current_time - last_increase_time) >= 15000) {
+			healspell.increase_uses();
+			last_increase_time = current_time;
+			bullet_spawn_time -= 100;
 		}
 
 

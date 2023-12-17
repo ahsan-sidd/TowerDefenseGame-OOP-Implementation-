@@ -16,6 +16,7 @@ public:
     Spell(int effect, int time);
     int get_num_uses();
     void reduce_uses();
+    void increase_uses();
 };
 
 #endif

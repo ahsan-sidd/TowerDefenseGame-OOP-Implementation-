@@ -14,3 +14,8 @@ void Spell::reduce_uses()
 {
     num_uses--;
 }
+
+void Spell::increase_uses()
+{
+    num_uses++;
+}
