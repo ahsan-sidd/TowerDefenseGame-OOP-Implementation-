@@ -921,16 +921,6 @@ bool Game::run( )
 		if (!isPaused){
 		breakthrough.drawObjects();
 		breakthrough.detect_collision();
-		if (ninja->get_health().get_current_health() <= 0)
-		{
-			endGameScreen(false);
-			quit = true;
-		}
-		if (tower.get_healthbar().get_current_health() <= 0)
-		{	
-			endGameScreen(true);
-			quit = true;
-		}
 		}
 		if (currentState == MENU){
 			menu.renderMenuScreen(gRenderer, e);
@@ -984,6 +974,16 @@ bool Game::run( )
 
 	    SDL_Delay(15);	//causes sdl engine to delay for specified miliseconds
 		//SDL_Delay can be lowered to 10-20 for smoother animation
+		if (ninja->get_health().get_current_health() <= 0)
+		{
+			endGameScreen(false);
+			quit = true;
+		}
+		if (tower.get_healthbar().get_current_health() <= 0)
+		{	
+			endGameScreen(true);
+			quit = true;
+		}
 	}
 
 	if (gTexture != nullptr){
