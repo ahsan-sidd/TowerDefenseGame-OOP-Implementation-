@@ -858,7 +858,7 @@ bool Game::run( )
 				else if (e.key.keysym.sym == SDLK_x)
 				{
 					// Move character if right arrow key is pressed
-					std::cout << "attack" << std::endl;
+					// std::cout << "attack" << std::endl;
 					ninja->attack();
 					ninja->isAttacking = true;
 					if (ninja->get_mover().x >=760)
@@ -874,7 +874,7 @@ bool Game::run( )
 
 		
 		if (ninja->isAttacking == true){
-				std::cout << "attack" << std::endl;
+				// std::cout << "attack" << std::endl;
 				ninja->attack();
 				if (ninja->get_mover().x >=760)
 				{
@@ -910,7 +910,7 @@ bool Game::run( )
 		//decrease bullet spawn time by 200ms every 10 seconds
 		if (!isPaused && (current_time - last_decrease_time) >= 10000)
 		{
-			bullet_spawn_time -= 200;
+			bullet_spawn_time -= 180;
 			last_decrease_time = current_time;
 		}
 		if (!isPaused && last_health_decrease - tower.get_healthbar().get_current_health() >= 50)
@@ -1125,18 +1125,19 @@ void Game::endGameScreen(bool win){
 		SDL_FreeSurface(surface);
 	}
 
+	bool check = false;
 	while (creditsRects.back().y + creditsRects.back().h > 0) {
 		
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
 		SDL_RenderClear(gRenderer);
 
+		if (check == true){
+			break;
+		}
+
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT or e.type == SDL_MOUSEBUTTONDOWN) {
-				for (auto& texture : creditsTextures) {
-					SDL_DestroyTexture(texture);
-				}
-				TTF_CloseFont(creditsFont);
-				return;
+				check = true;
 			}
 		}
 
