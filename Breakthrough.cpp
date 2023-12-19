@@ -11,7 +11,6 @@ void Breakthrough::drawObjects()
     {
         for (Unit* unit : characters_list) {
             unit->draw(unit);
-            // unit->move();
         }
     }
 
@@ -24,16 +23,6 @@ void Breakthrough::drawObjects()
 
 void Breakthrough::detect_collision()
 {
-    // if (!characters_list.empty() && !bullets_list.empty())
-    // {
-    //     for (Unit* unit : bullets_list)
-    //     {
-    //         if (unit->get_mover().x < characters_list.front()->get_mover().x)
-    //         {
-    //             cout << "collision ";
-    //         }
-    //     }
-    // }
 
     if (!characters_list.empty() && !bullets_list.empty())
     {
@@ -48,16 +37,6 @@ void Breakthrough::detect_collision()
                 int damage = bullet->get_damage();
 
                 (*firstCharacter)->get_health().reduce_health(damage);
-
-                // Check if health of character is <= 0. If so, remove character from screen and list
-                // if ((*firstCharacter)->get_health().get_current_health() <= 0)
-                // {
-                //     delete *firstCharacter;
-                //     // *firstCharacter = nullptr;
-                //     firstCharacter = characters_list.erase(firstCharacter);
-                //     std::cout << "size after death: " << characters_list.size();
-                //     // std::cout << "game over";
-                // }
 
                 delete *bulletIter;
                 *bulletIter = nullptr;
@@ -79,9 +58,6 @@ void Breakthrough::detect_collision()
     }
 }
 
-
-
-// creates new objects 
 
 
 void Breakthrough::createObject(int x, int y, string object_to_create)
